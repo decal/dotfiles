@@ -10,18 +10,20 @@ esac
 
 # don't put duplicate lines or lines starting with space in the history.
 # See bash(1) for more options
-HISTCONTROL=ignoreboth
+#HISTCONTROL=ignoreboth
+HISTCONTROL=erasedups
 
 # append to the history file, don't overwrite it
-shopt -s histappend
+# shopt -s checkwinsize cmdhist complete_fullquote expand_aliases extglob extquote force_fignore histappend his
+# treedit interactive_comments lithist login_shell progcomp promptvars sourcepath
 
 # for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
-HISTSIZE=1000
-HISTFILESIZE=2000
+HISTSIZE=4096
+HISTFILESIZE=8192
 
 # check the window size after each command and, if necessary,
 # update the values of LINES and COLUMNS.
-shopt -s checkwinsize
+# shopt -s checkwinsize
 
 # If set, the pattern "**" used in a pathname expansion context will
 # match all files and zero or more directories and subdirectories.
@@ -105,9 +107,7 @@ alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo
 # ~/.bash_aliases, instead of adding them here directly.
 # See /usr/share/doc/bash-doc/examples in the bash-doc package.
 
-if [ -f ~/.bash_aliases ]; then
-    . ~/.bash_aliases
-fi
+[ -f ~/.bash_aliases ] && source ~/.bash_aliases
 
 # enable programmable completion features (you don't need to enable
 # this, if it's already enabled in /etc/bash.bashrc and /etc/profile
@@ -126,7 +126,8 @@ alias find-extfiles-uniq='for f in $(find . -type f);do echo $(basename $f);done
 alias find-suid-bins='find / -type f -perm -2000 -o -perm -4000 -ls'
 alias find-files-uniq='for f in $(find . -type f);do echo $(basename $f);done | sort -u'
 alias sudo-apt-update='sudo apt-get -y update;sudo apt-get -y upgrade;sudo apt-get -y autoremove'
-alias config-help='./configure --help > configure-help.out 2>&1 && less configure-help.out'
+alias config-help="./configure --help > configure-help.out 2>&1 && $PAGER configure-help.out"
+alias configure-help="./configure --help > configure-help.out 2>&1 && $PAGER configure-help.out"
 alias ren='renice'
 alias ssl2='openssl s_client -ssl2 -connect'
 alias ssl3='openssl s_client -ssl3 -connect'
@@ -140,7 +141,6 @@ alias tls1_2='openssl s_client -tls1_2 -connect'
 alias tls13='openssl s_client -tls13 -connect'
 alias tls1_3='openssl s_client -tls1_3 -connect'
 alias GIT="cd /home/decal/GIT/decal;cd $1"
-alias clone="git clone https://github.com/$1/$2"
 alias cloneall="githose clone $1"
 alias cloneallrepo="githose clone $1"
 alias cloneallrepos="githose clone $1"
@@ -161,6 +161,12 @@ alias chm0d='chmod 0'
 alias ch0wn='chown 0'
 alias ch00wn='chown 0:0'
 alias mirror='wget --mirror --no-parent --inet4-only --no-check-certificate'
+
+function clone {
+  [ ! $2 ] && echo "usage: clone USER REPO" && return 1
+
+  git clone https://github.com/$1/$2
+}
 
 function maxnice {
   renice -n -20 `pidof $*`
@@ -193,3 +199,10 @@ export HTTP='http://finalstage.att.com/'
 
 source $HOME/work/riteaid/set-vars
 source $HOME/code/bash/bash_aliases
+
+function echo_shopt {
+  echo shopt -u $(shopt | egrep 'off$' | awk '{print$1}' | tr '\n' ' ')
+  echo sohpt -s $(shopt | egrep 'on$' | awk '{print$1}' | tr '\n' ' ')
+}
+shopt -u autocd cdable_vars cdspell checkhash checkjobs compat31 compat32 compat40 compat41 compat42 direxpand dirspell dotglob execfail extdebug failglob globasciiranges gnu_errfmt histverify hostcomplete huponexit lastpipe mailwarn no_empty_cmd_completion nocaseglob nocasematch nullglob restricted_shell shift_verbose xpg_echo
+sohpt -s checkwinsize cmdhist complete_fullquote expand_aliases extglob extquote force_fignore globstar histappend histreedit interactive_comments lithist login_shell progcomp promptvars sourcepath
