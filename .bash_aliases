@@ -1,129 +1,74 @@
-# ----------------------- #
-# Alias file for jacobsin #
-# ----------------------- #
+# Terminal Commands
+alias c=clear
+alias q=exit
+alias h=history
+alias j='jobs -l'
+alias ..='cd ../'
+alias ...='cd ../../'
+alias .3='cd ../../../'
+alias winsize=xwininfo
 
-# File structure
-#----------------
+# Safety Commands
+alias rm='rm -I --preserve-root'
+alias mv='mv -i'
+alias cp='cp -i'
 
-	#----------------------------------------------
-	# Terminal Commands
-	# ---------------------------------------------
-		alias c="clear"
-		alias q="exit"
-		alias h="history"
-		alias j="jobs -l"
-		alias ..="cd ../"
-		alias ...="cd ../../"
-		alias .3="cd ../../../"
-		alias winsize="xwininfo"
-	#-----------------------------------------------
+# List Commands
+alias ll='ls -l'
+alias la='ls -a'
+alias ls='ls --color'
+alias lsa='ls -a --color'
+alias ks=ls
 
+# Directory Creation Commands
+alias mkdir='mkdir -pv'
 
-	#-----------------------------------------------
-	# Safety Commands
-	#-----------------------------------------------
-		alias rm="rm -I --preserve-root"
-		alias mv="mv -i"
-		alias cp="cp -i"
-	#-----------------------------------------------
+# grep commands
+alias grep='grep --color'
 
+# chmod commands
+alias chx='chmod +x'
 
-	#-----------------------------------------------
-	# List Commands
-	#-----------------------------------------------
-		alias l="ls -a"
-		alias ls="ls -1 --color=auto"
-		alias lsa="ls -a -1 --color=auto"
-		alias ks="ls"
-	#-----------------------------------------------
+# Update commands
+alias upd='sudo apt update'
+alias upg='sudo apt upgrade -y'
+alias dup='sudo apt dist-upgrade -y'
+alias aure='sudo apt autoremove -y'
+alias update='upd && upg && dup && aure'
 
+# Lock Commands
+alias reboot='sudo reboot 00'
+alias shutdown='sudo shutdown 00'
 
-	#-----------------------------------------------
-	# Creation Commands
-	#-----------------------------------------------
-		alias mkdir="mkdir -pv"
-	#-----------------------------------------------
+# Install commands
+alias install='sudo apt install'
+alias fixdpkg='sudo dpkg --configure -a'
 
+# Git Commands
+alias add='git add .'
+alias commit='git commit -m'
+alias push='git push'
 
-	#-----------------------------------------------
-	# Find Commands
-	#-----------------------------------------------
-		alias grep="grep --color"
-	#-----------------------------------------------
+# Ping Commands
+alias ping='ping -c 5'
+alias fping='ping -c 100 -s.2'
 
+# Vim commands
+alias vi=vim
+alias svi='sudo vi'
+alias sbash='sudo bash'
+alias edit=vim
 
-	#-----------------------------------------------
-	# Permissions Commands
-	#-----------------------------------------------
-		alias chx="chmod +x"
-	#-----------------------------------------------
+# PAGER commands
+alias More=more
+alias Less=less
+alias Most=most
 
-
-# System Commands
-#-----------------
-
-	#-----------------------------------------------
-	# Update commands
-	#-----------------------------------------------
-		alias upd="sudo apt update"
-		alias upg="sudo apt upgrade -y"
-		alias dup="sudo apt dist-upgrade -y"
-		alias aure="sudo apt autoremove -y"
-		alias update="upd && upg && dup && aure"
-	#-----------------------------------------------
-
-
-	#-----------------------------------------------
-	# Lock Commands
-	#-----------------------------------------------
-		alias reboot="sudo reboot 00"
-		alias shutdown="sudo shutdown 00"
-	#-----------------------------------------------
-
-
-	#-----------------------------------------------
-	# Install commands
-	#-----------------------------------------------
-		alias install="sudo apt install"
-		alias fixdpkg="sudo dpkg --configure -a"
-	#-----------------------------------------------
-
-
-# Other Commands
-#----------------
-
-	#------------------------------------------------
-	# Git Commands
-	#------------------------------------------------
-		alias add="git add ."
-		alias commit="git commit -m"
-		alias push="git push"
-	#------------------------------------------------
-
-
-	#------------------------------------------------
-	# Ping Commands
-	#------------------------------------------------
-		alias ping="ping -c 5"
-		alias fping="ping -c 100 -s.2"
-	#------------------------------------------------
-
-
-	#------------------------------------------------
-	# Vim Commands
-	#------------------------------------------------
-		alias vi="vim"
-		alias svi="sudo vi"
-		alias edit="vim"
-	#------------------------------------------------
-	
-
-	#------------------------------------------------
-	# Python Commands
-	#------------------------------------------------
-		alias python3="python3.6 -OO"
-		alias python2="python -OO"
-	#------------------------------------------------
+# Python commands
+alias python3="python3.5 -OO"
+alias python2="python -OO"
 
 ## TODO: write gith function so 'gith clone' works..
 alias gith-clone="git clone --verbose --recurse-submodules --no-single-branch --progress -- \"https://github.com/${BASH_ARGV[1]}/${BASH_ARGV[2]}\""
+
+alias start="/mnt/c/Windows/System32/cmd.exe /c START /MAX /NODE 0 /D 'C:\Users\decal\AppData\Local\lxss\home\decal' /I /ABOVENORMAL"

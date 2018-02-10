@@ -77,9 +77,9 @@ esac
 # enable color support of ls and also add handy aliases
 if [ -x /usr/bin/dircolors ]; then
     test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
-    alias ls='ls --color=auto'
-    #alias dir='dir --color=auto'
-    #alias vdir='vdir --color=auto'
+    alias ls='ls --color'
+    #alias dir='dir --color'
+    #alias vdir='vdir --color'
 
     alias grep='grep --color=auto'
     alias fgrep='fgrep --color=auto'
@@ -94,9 +94,9 @@ fi
 alias ll='ls -alF'
 alias la='ls -A'
 alias l='ls -CF'
-alias lh='ls -alt | head'
-alias lh2='ls -alt | head -20'
-alias lh3='ls -alt | head -30'
+alias lh='ls -alt --color | head'
+alias lh2='ls -alt --color | head -20'
+alias lh3='ls -alt --color | head -30'
 
 # Add an "alert" alias for long running commands.  Use like so:
 #   sleep 10; alert
@@ -165,11 +165,33 @@ alias mirror='wget --mirror --no-parent --inet4-only --no-check-certificate'
 function clone {
   [ ! $2 ] && echo "usage: clone USER REPO" && return 1
 
-  git clone https://github.com/$1/$2
+  for r in $*
+    do nice git clone --verbose -- "https://github.com/${1}/${r}"
+  done
 }
 
 function maxnice {
   renice -n -20 `pidof $*`
+}
+
+function remirrors {
+  [ ! $1 ] && echo "usage: remirror MIRDIR" && return 1
+
+  for urlstr in $(find $1 -type d -print)
+    do nice wget --tries=4 -4 -m -np -nc --no-check-certificate -- "https://${urlstr}"
+  done
+
+  return 0
+}
+
+function remirror {
+  [ ! $1 ] && echo "usage remirror MIRDIR" && return 1
+
+  for urlstr in $(find $1 -type d -print)
+    do nice wget --tries=4 -4 -m -np -nc -- "http://${urlstr}"
+  done
+
+  return 0
 }
 
 alias nicely='maxnice'
@@ -202,7 +224,12 @@ source $HOME/code/bash/bash_aliases
 
 function echo_shopt {
   echo shopt -u $(shopt | egrep 'off$' | awk '{print$1}' | tr '\n' ' ')
-  echo sohpt -s $(shopt | egrep 'on$' | awk '{print$1}' | tr '\n' ' ')
+  echo shopt -s $(shopt | egrep 'on$' | awk '{print$1}' | tr '\n' ' ')
 }
+
 shopt -u autocd cdable_vars cdspell checkhash checkjobs compat31 compat32 compat40 compat41 compat42 direxpand dirspell dotglob execfail extdebug failglob globasciiranges gnu_errfmt histverify hostcomplete huponexit lastpipe mailwarn no_empty_cmd_completion nocaseglob nocasematch nullglob restricted_shell shift_verbose xpg_echo
 sohpt -s checkwinsize cmdhist complete_fullquote expand_aliases extglob extquote force_fignore globstar histappend histreedit interactive_comments lithist login_shell progcomp promptvars sourcepath
+
+bind '"\e[A": history-search-backward'
+bind '"\e[B": history-search-forward'
+
