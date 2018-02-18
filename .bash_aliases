@@ -30,11 +30,11 @@ alias grep='grep --color'
 alias chx='chmod +x'
 
 # Update commands
-alias upd='sudo apt update'
-alias upg='sudo apt upgrade -y'
-alias dup='sudo apt dist-upgrade -y'
-alias aure='sudo apt autoremove -y'
-alias update='upd && upg && dup && aure'
+alias update='sudo apt update'
+alias upgrade='sudo apt upgrade -y'
+alias dist-upgrade='sudo apt dist-upgrade -y'
+alias auto-remove='sudo apt autoremove -y'
+alias UPDATE='update && upgrade && dist-upgrade && autoremove'
 
 # Lock Commands
 alias reboot='sudo reboot 00'
@@ -45,7 +45,7 @@ alias install='sudo apt install'
 alias fixdpkg='sudo dpkg --configure -a'
 
 # Git Commands
-alias add='git add .'
+alias add="git add $*"
 alias commit='git commit -m'
 alias push='git push'
 
@@ -56,6 +56,7 @@ alias fping='ping -c 100 -s.2'
 # Vim commands
 alias vi=vim
 alias svi='sudo vi'
+alias svim='sudo vim'
 alias sbash='sudo bash'
 alias edit=vim
 
