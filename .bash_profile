@@ -1,3 +1,5 @@
+[ -f ~/.bashrc ] && source ~/.bashrc
+
 function colorize() {
   local STRING="$1"
   local COLOR="$2"

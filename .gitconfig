@@ -1,0 +1,10 @@
+[push]
+	default = simple
+[user]
+	name = Derek Callaway
+	email = decal@sdf.org
+[http]
+	postBuffer = 20480
+[core]
+	autocrlf = true
+	editor = vim

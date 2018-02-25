@@ -13,3 +13,6 @@ nano (1)             - Nano's ANOther editor, an enhanced free Pico clone
 irb (1)              - Interactive Ruby Shell
 git (1)              - the stupid content tracker
 dircolors (1)        - color setup for ls
+ex (1)               - Vi IMproved, a programmers text editor
+select-editor (1)    - select your default sensible-editor from all installed editors
+ytalk (1)            - A multi-user chat program.

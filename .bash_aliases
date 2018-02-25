@@ -14,10 +14,10 @@ alias mv='mv -i'
 alias cp='cp -i'
 
 # List Commands
+alias ls='ls --color -C'
 alias ll='ls -l'
 alias la='ls -a'
-alias ls='ls --color'
-alias lsa='ls -a --color'
+alias lsa='ls -a'
 alias ks=ls
 
 # Directory Creation Commands
