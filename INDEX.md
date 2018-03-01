@@ -2,6 +2,7 @@ netrc (5)            - user configuration for ftp
 bash (1)             - GNU Bourne-Again SHell
 detox (1)            - clean up filenames
 detoxrc (5)          - configuration file for
+docker (1)           - Docker image and container command line interface
 gitignore (5)        - Specifies intentionally untracked files to ignore
 tcsh (1)             - C shell with file name completion and command line editing
 ssh (1)              - OpenSSH SSH client (remote login program)

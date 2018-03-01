@@ -239,3 +239,5 @@ if [ -f '/home/decal/google-cloud-sdk/path.bash.inc' ]; then source '/home/decal
 
 # The next line enables shell command completion for gcloud.
 if [ -f '/home/decal/google-cloud-sdk/completion.bash.inc' ]; then source '/home/decal/google-cloud-sdk/completion.bash.inc'; fi
+
+echo 'Write WAF that enforces Access-Control-Allow-Origin and other security headers'
