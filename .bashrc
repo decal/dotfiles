@@ -10,8 +10,7 @@ esac
 
 # don't put duplicate lines or lines starting with space in the history.
 # See bash(1) for more options
-#HISTCONTROL=ignoreboth
-HISTCONTROL=erasedups
+HISTCONTROL='ignorespace:erasedups'
 
 # append to the history file, don't overwrite it
 # shopt -s checkwinsize cmdhist complete_fullquote expand_aliases extglob extquote force_fignore histappend his
@@ -45,7 +44,7 @@ esac
 # uncomment for a colored prompt, if the terminal has the capability; turned
 # off by default to not distract the user: the focus in a terminal window
 # should be on the output of commands, not on the prompt
-#force_color_prompt=yes
+force_color_prompt=yes
 
 if [ -n "$force_color_prompt" ]; then
     if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
@@ -78,35 +77,21 @@ esac
 if [ -x /usr/bin/dircolors ]; then
     test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
     alias ls='ls --color'
-    #alias dir='dir --color'
-    #alias vdir='vdir --color'
-
+    alias dir='dir --color'
+    alias vdir='vdir --color'
     alias grep='grep --color=auto'
     alias fgrep='fgrep --color=auto'
     alias egrep='egrep --color=auto'
-    alias comp='gcc -O2 -fopenmp -Wall -o $1 $1.c && ./$1'
+    alias ccaout='gcc -O2 -fopenmp -Wall -o $1 $1.c && ./$1'
 fi
 
 # colored GCC warnings and errors
-#export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
-
-# some more ls aliases
-alias ll='ls -alF'
-alias la='ls -A'
-alias l='ls -CF'
-alias lh='ls -alt --color | head'
-alias lh2='ls -alt --color | head -20'
-alias lh3='ls -alt --color | head -30'
-
-# Add an "alert" alias for long running commands.  Use like so:
-#   sleep 10; alert
-alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
+export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
 
 # Alias definitions.
 # You may want to put all your additions into a separate file like
 # ~/.bash_aliases, instead of adding them here directly.
 # See /usr/share/doc/bash-doc/examples in the bash-doc package.
-
 [ -f ~/.bash_aliases ] && source ~/.bash_aliases
 
 # enable programmable completion features (you don't need to enable
@@ -122,45 +107,8 @@ fi
 
 umask 0027
 
-alias find-extfiles-uniq='for f in $(find . -type f);do echo $(basename $f);done | egrep "[.]" | sort -u'
-alias find-suid-bins='find / -type f -perm -2000 -o -perm -4000 -ls'
-alias find-files-uniq='for f in $(find . -type f);do echo $(basename $f);done | sort -u'
-alias sudo-apt-update='sudo apt-get -y update;sudo apt-get -y upgrade;sudo apt-get -y autoremove'
-alias config-help="./configure --help > configure-help.out 2>&1 && $PAGER configure-help.out"
-alias configure-help="./configure --help > configure-help.out 2>&1 && $PAGER configure-help.out"
-alias ren='renice'
-alias ssl2='openssl s_client -ssl2 -connect'
-alias ssl3='openssl s_client -ssl3 -connect'
-alias ssl='openssl s_client -quiet -connect'
-alias tls='openssl s_client -connect'
-alias tls1='openssl s_client -tls1 -connect'
-alias tls11='openssl s_client -tls1 -connect'
-alias tls1_1='openssl s_client -tls1_1 -connect'
-alias tls12='openssl s_client -tls1_2 -connect'
-alias tls1_2='openssl s_client -tls1_2 -connect'
-alias tls13='openssl s_client -tls13 -connect'
-alias tls1_3='openssl s_client -tls1_3 -connect'
-alias GIT="cd /home/decal/GIT/decal;cd $1"
-alias cloneall="githose clone $1"
-alias cloneallrepo="githose clone $1"
-alias cloneallrepos="githose clone $1"
-alias cloneallgist="gisthose clone $1"
-alias cloneallgists="gisthose clone $1"
-alias cloneallacct="gristhose clone $1"
-alias clonealluser="gristhose clone $1"
-alias cloneallusers="gristhose clone $*"
-
-alias gehc="cd /mnt/c/Users/decal/Downloads/Magicenovia/enovia"
-
 ## TODO: make this a function that takes username as first arg and repo as second
 ## TODO: add this and any other related aliases that need to be made to githose repo
-alias github="cd /home/decal/github;cd */$1"
-alias chm='chmod'
-alias cho='chown'
-alias chm0d='chmod 0'
-alias ch0wn='chown 0'
-alias ch00wn='chown 0:0'
-alias mirror='wget --mirror --no-parent --inet4-only --no-check-certificate'
 
 function clone {
   [ ! $2 ] && echo "usage: clone USER REPO" && return 1
@@ -194,9 +142,6 @@ function remirror {
   return 0
 }
 
-alias nicely='maxnice'
-alias nitro='maxnice'
-
 function pipx() {
   /usr/bin/pip3 $*
   /usr/bin/pip $*
@@ -208,18 +153,26 @@ export GIT_EDITOR='/usr/bin/vim'
 
 set -o vi
 
-export LIBRE_COMPILE=' -I/home/decal/local/include -L/home/decal/local/lib -lssl -lcrypto'
-export OSSL_COMPILE='  -I/usr/local/src/openssl-1.1.0f/include -L/usr/local/lib -lssl -lcrypto'
+#export LIBRE_COMPILE=' -I/home/decal/local/include -L/home/decal/local/lib -lssl -lcrypto'
+#export OSSL_COMPILE='  -I/usr/local/src/openssl-1.1.0f/include -L/usr/local/lib -lssl -lcrypto'
 
 #export HTTPS_PROXY='one.proxy.att.com:8080'
 #export https_proxy="$HTTPS_PROXY"
 #export http_proxy="$https_proxy"
 #export HTTP_PROXY="$http_proxy"
-export FS='/home/decal/GITLAB/decal/IOAemScan/bin/finalstage.att.com/'
-export HTTPS='https://finalstage.att.com/'
-export HTTP='http://finalstage.att.com/'
+#export FS='/home/decal/GITLAB/decal/IOAemScan/bin/finalstage.att.com/'
+#export HTTPS='https://finalstage.att.com/'
+#export HTTP='http://finalstage.att.com/'
 
-source $HOME/work/riteaid/set-vars
+#export net="riteaid.net"
+#export NET="riteaid.net"
+
+#export org="riteaid.org"
+#export ORG="riteaid.org"
+
+#export com="riteaid.com"
+#export COM="riteaid.com"
+
 source $HOME/code/bash/bash_aliases
 
 function echo_shopt {
@@ -232,7 +185,6 @@ shopt -s checkwinsize cmdhist complete_fullquote expand_aliases extglob extquote
 
 bind '"\e[A": history-search-backward'
 bind '"\e[B": history-search-forward'
-
 
 # The next line updates PATH for the Google Cloud SDK.
 if [ -f '/home/decal/google-cloud-sdk/path.bash.inc' ]; then source '/home/decal/google-cloud-sdk/path.bash.inc'; fi

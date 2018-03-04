@@ -1,1 +1,1 @@
-Configuration and runcom files often hidden in $HOME
+# Configuration and runcom files often found as hidden files in $HOME
