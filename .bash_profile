@@ -1,3 +1,5 @@
+# Read this when bash is initialized as a login shell
+
 [ -f ~/.bashrc ] && source ~/.bashrc
 
 function colorize() {
@@ -60,4 +62,12 @@ function parse_git_branch() {
   echo -n "($GITPROMPT)"
 }
 
-PS1="$(colorize "\u@\h" "GREEN" 0) $(colorize "(\$(date +%H:%M))" "WHITE" 1) $(colorize "\w" "BLUE" 1) \$(parse_git_branch)\n\$ "
+function enable-git-prompt {
+  export PS1OLD="$PS1"
+  export PS1="$(colorize "\u@\h" "GREEN" 0) $(colorize "(\$(date +%H:%M))" "WHITE" 1) $(colorize "\w" "BLUE" 1) \$(parse_git_branch)\n\$ "
+}
+
+function disable-git-prompt {
+  export PS1GIT="$PS1"
+  export PS1="$PS1OLD"
+}

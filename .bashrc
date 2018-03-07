@@ -1,6 +1,5 @@
 # ~/.bashrc: executed by bash(1) for non-login shells.
-# see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
-# for examples
+# see /usr/share/doc/bash/examples/startup-files (in the package bash-doc) for examples
 
 # If not running interactively, don't do anything
 case $- in
@@ -17,16 +16,7 @@ HISTCONTROL='ignorespace:erasedups'
 # treedit interactive_comments lithist login_shell progcomp promptvars sourcepath
 
 # for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
-HISTSIZE=4096
-HISTFILESIZE=8192
-
-# check the window size after each command and, if necessary,
-# update the values of LINES and COLUMNS.
-# shopt -s checkwinsize
-
-# If set, the pattern "**" used in a pathname expansion context will
-# match all files and zero or more directories and subdirectories.
-#shopt -s globstar
+HISTSIZE=4096 HISTFILESIZE=8192
 
 # make less more friendly for non-text input files, see lesspipe(1)
 [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
@@ -62,16 +52,8 @@ if [ "$color_prompt" = yes ]; then
 else
     PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
 fi
-unset color_prompt force_color_prompt
 
-# If this is an xterm set the title to user@host:dir
-case "$TERM" in
-xterm*|rxvt*)
-    PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]$PS1"
-    ;;
-*)
-    ;;
-esac
+unset color_prompt force_color_prompt
 
 # enable color support of ls and also add handy aliases
 if [ -x /usr/bin/dircolors ]; then
@@ -87,12 +69,6 @@ fi
 
 # colored GCC warnings and errors
 export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
-
-# Alias definitions.
-# You may want to put all your additions into a separate file like
-# ~/.bash_aliases, instead of adding them here directly.
-# See /usr/share/doc/bash-doc/examples in the bash-doc package.
-[ -f ~/.bash_aliases ] && source ~/.bash_aliases
 
 # enable programmable completion features (you don't need to enable
 # this, if it's already enabled in /etc/bash.bashrc and /etc/profile
@@ -149,7 +125,7 @@ function pipx() {
 
 export LD_LIBRARY_PATH='/home/decal/local/lib:/usr/local/lib'
 export RUBYLIB='/home/decal/GIT/decal/zap-attack/lib:/home/decal/GIT/decal/aemscanio/lib:/home/decal/GIT/decal/combos_permutedirs/lib:/home/decal/GIT/decal/dirverser/lib:/home/decal/GIT/decal/percent_encode/lib:/home/decal/GIT/decal/filb/lib:/home/decal/code/rb/helpshow/lib'
-export GIT_EDITOR='/usr/bin/vim'
+export EDITOR='/usr/bin/vim' GIT_EDITOR="$EDITOR"
 
 set -o vi
 
@@ -157,23 +133,15 @@ set -o vi
 #export OSSL_COMPILE='  -I/usr/local/src/openssl-1.1.0f/include -L/usr/local/lib -lssl -lcrypto'
 
 #export HTTPS_PROXY='one.proxy.att.com:8080'
-#export https_proxy="$HTTPS_PROXY"
-#export http_proxy="$https_proxy"
+#export https_proxy="$HTTPS_PROXY" http_proxy="$https_proxy"
 #export HTTP_PROXY="$http_proxy"
-#export FS='/home/decal/GITLAB/decal/IOAemScan/bin/finalstage.att.com/'
-#export HTTPS='https://finalstage.att.com/'
-#export HTTP='http://finalstage.att.com/'
+#export HOST='finalstage.att.com'
+#export HTTPS="https://${HOST}/' HTTP="http://${HOST}/"
 
-#export net="riteaid.net"
-#export NET="riteaid.net"
-
-#export org="riteaid.org"
-#export ORG="riteaid.org"
-
-#export com="riteaid.com"
-#export COM="riteaid.com"
-
-source $HOME/code/bash/bash_aliases
+# These are exports for the site I'm currently testing
+#export net="riteaid.net" NET="riteaid.net"
+#export org="riteaid.org" ORG="riteaid.org"
+#export com="riteaid.com" COM="riteaid.com"
 
 function echo_shopt {
   echo shopt -u $(shopt | egrep 'off$' | awk '{print$1}' | tr '\n' ' ')
