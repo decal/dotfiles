@@ -1,0 +1,28 @@
+# Default
+* text=auto
+
+# make files
+CMakeLists.txt export-subst
+
+git-hash.sh export-subst
+
+# Windows
+*.bat	eol=crlf
+*.ps1 eol=crlf
+
+# Linux
+*.sh text eol=lf
+*.bash text eol=lf
+
+# Application Files
+.sublime-settings text eol=lf
+
+# Others
+*.txt	text eol=lf
+*.js eol=lf
+*.vcproj text eol=crlf
+
+# Images
+*.jpg binary
+*.png binary
+*.gif binary

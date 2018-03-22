@@ -1,6 +1,8 @@
 # ~/.bashrc: executed by bash(1) for non-login shells.
 # see /usr/share/doc/bash/examples/startup-files (in the package bash-doc) for examples
 
+[ -f ~/.bash_aliases ] && source ~/.bash_aliases
+
 # If not running interactively, don't do anything
 case $- in
     *i*) ;;
@@ -83,49 +85,95 @@ fi
 
 umask 0027
 
-## TODO: make this a function that takes username as first arg and repo as second
 ## TODO: add this and any other related aliases that need to be made to githose repo
-
 function clone {
-  [ ! $2 ] && echo "usage: clone USER REPO" && return 1
+  [ ! $2 ] && echo "usage: clone USER REPO [REPO2 [...]" && return 1
+
+  local auser="$1" 
+  local -i aretn=0
+
+  shift
 
   for r in $*
-    do nice git clone --verbose -- "https://github.com/${1}/${r}"
+    do git clone -v "https://github.com/${auser}/${r}" & 2>/dev/null
+
+    [ $? -gt $aretn ] && aretn=$?
   done
+
+  return $aretn
+}
+
+function pull {
+  local -i aretn=0 nargs=$#
+
+  [ ! $1 ] && echo "usage: pull DIR [DIR2 [...]]" && return 1
+
+  for d in $*
+    do cd "$d"
+    git pull -v &
+    cd ..
+  done
+
+  for n in `seq 1 $nargs`
+    do wait
+    [ $? -gt $aretn ] && aretn=$?
+  done
+
+  return $aretn
 }
 
 function maxnice {
   renice -n -20 `pidof $*`
+
+  return $?
 }
 
 function remirrors {
   [ ! $1 ] && echo "usage: remirror MIRDIR" && return 1
 
+  local -i aretn=0
+
   for urlstr in $(find $1 -type d -print)
     do nice wget --tries=4 -4 -m -np -nc --no-check-certificate -- "https://${urlstr}"
+
+    [ $? -gt $aretn ] && aretn=$?
   done
 
-  return 0
+  return $aretn
 }
 
 function remirror {
   [ ! $1 ] && echo "usage remirror MIRDIR" && return 1
 
+  local -i aretn=0
+
   for urlstr in $(find $1 -type d -print)
     do nice wget --tries=4 -4 -m -np -nc -- "http://${urlstr}"
+
+    [ $? -gt $aretn ] && aretn=$?
   done
 
-  return 0
+  return $aretn
 }
 
-function pipx() {
+function pipx {
+  local -i rc=0
+
   /usr/bin/pip3 $*
+ 
+  [ $? -ne 0 ] && rc=$?
+
   /usr/bin/pip $*
+
+  [ $? -ne 0 ] && rc=$?
+
+  return $rc
 }
 
 export LD_LIBRARY_PATH='/home/decal/local/lib:/usr/local/lib'
 export RUBYLIB='/home/decal/GIT/decal/zap-attack/lib:/home/decal/GIT/decal/aemscanio/lib:/home/decal/GIT/decal/combos_permutedirs/lib:/home/decal/GIT/decal/dirverser/lib:/home/decal/GIT/decal/percent_encode/lib:/home/decal/GIT/decal/filb/lib:/home/decal/code/rb/helpshow/lib'
-export EDITOR='/usr/bin/vim' GIT_EDITOR="$EDITOR"
+export EDITOR=/usr/bin/vim GIT_EDITOR=/usr/bin/vim
+export PAGER=/usr/bin/less GIT_PAGER=/usr/bin/less
 
 set -o vi
 
@@ -143,9 +191,13 @@ set -o vi
 #export org="riteaid.org" ORG="riteaid.org"
 #export com="riteaid.com" COM="riteaid.com"
 
+export FIGNORE=".o:~"
+
 function echo_shopt {
   echo shopt -u $(shopt | egrep 'off$' | awk '{print$1}' | tr '\n' ' ')
   echo shopt -s $(shopt | egrep 'on$' | awk '{print$1}' | tr '\n' ' ')
+
+  return 0
 }
 
 shopt -u autocd cdable_vars cdspell checkhash checkjobs compat31 compat32 compat40 compat41 compat42 direxpand dirspell dotglob execfail extdebug failglob globasciiranges gnu_errfmt histverify hostcomplete huponexit lastpipe mailwarn no_empty_cmd_completion nocaseglob nocasematch nullglob restricted_shell shift_verbose xpg_echo

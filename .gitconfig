@@ -1,10 +1,69 @@
+[rebase]
+  verbose = true
+  autoStash = true
+  autoSquash = true
+
+[commit]
+  verbose = true
+  gpgsign = false
+  template = /home/decal/.gitmessage
+
 [push]
-	default = simple
+  verbose = true
+  default = simple
+
 [user]
-	name = Derek Callaway
-	email = decal@sdf.org
+  name = Derek Callaway
+  email = decal@sdf.org
+
 [http]
-	postBuffer = 20480
+  postBuffer = 20480
+
 [core]
-	autocrlf = true
-	editor = vim
+  autocrlf = true
+  editor = vim
+  excludesfile = /home/decal/.gitignore
+  whitespace = tab-in-indent
+
+[credential]
+	helper = cache --timeout=20480
+
+[color]
+  ui = always
+  status = auto
+  branch = auto
+  interactive = auto
+  diff = auto
+[alias]
+  a = add
+  ad = ad
+  b = branch
+  br = branch
+  c = commit
+  cm = commit
+  co = checkout
+  d = diff
+  di = diff
+  e = add --edit
+  ed = add --edit
+  f = fetch
+  fe = fetch
+  g = grep
+  gr = grep
+  h = help
+  he = help
+  i = init
+  in = init
+  lo = log
+  l = log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short
+  ll = log --stat
+  m = merge
+  me = merge
+  r = remote
+  re = remote
+  s = status --branch --short
+  st = status
+  t = tag
+  ta = tag
+  w = whatchanged
+  wh = whatchanged
