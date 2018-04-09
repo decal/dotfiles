@@ -20,10 +20,10 @@
   postBuffer = 20480
 
 [core]
-  autocrlf = true
+  autocrlf = false
   editor = vim
   excludesfile = /home/decal/.gitignore
-  whitespace = tab-in-indent
+  whitespace = indent-with-non-tab, tabwidth=2
 
 [credential]
 	helper = cache --timeout=20480
@@ -34,36 +34,13 @@
   branch = auto
   interactive = auto
   diff = auto
+
 [alias]
-  a = add
-  ad = ad
-  b = branch
-  br = branch
-  c = commit
-  cm = commit
+  ci = commit
   co = checkout
-  d = diff
-  di = diff
-  e = add --edit
-  ed = add --edit
-  f = fetch
-  fe = fetch
-  g = grep
-  gr = grep
-  h = help
-  he = help
-  i = init
-  in = init
-  lo = log
-  l = log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short
-  ll = log --stat
-  m = merge
-  me = merge
-  r = remote
-  re = remote
-  s = status --branch --short
   st = status
-  t = tag
-  ta = tag
-  w = whatchanged
-  wh = whatchanged
+  br = branch
+  wc = whatchanged
+  hist = log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short
+  type = cat-file -t
+  dump = cat-file -p

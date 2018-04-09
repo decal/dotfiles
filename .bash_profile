@@ -2,12 +2,10 @@
 
 [ -f ~/.bashrc ] && source ~/.bashrc
 
-function colorize() {
-  local STRING="$1"
-  local COLOR="$2"
-  local BOLD="$3"
+function colorize {
+  local STRING="$1" COLOR="$2" BOLD="$3"
 
-  local COLORS=("BLACK" "RED" "GREEN" "YELLOW" "BLUE" "MAGENTA" "CYAN" "WHITE")
+  local COLORS=( BLACK RED GREEN YELLOW BLUE MAGENTA CYAN WHITE )
   local CC="\e[0m" # Default no color
   local INDEX=0;
 
@@ -25,32 +23,35 @@ function colorize() {
   echo -n "$CC$STRING\e[m"
 }
 
-function parse_git_branch() {
-  local BRANCH
-  local ERRCODE
+function parse_git_branch {
+  local BRANCH ERRCODE
+
   BRANCH=$(git symbolic-ref HEAD 2> /dev/null) || return
   BRANCH=${BRANCH#refs/heads/}
+
   local GITPROMPT=$BRANCH
 
   # Staged changes but not committed
   `git diff --cached --quiet 2>/dev/null >&2`; ERRCODE=$?;
-  if [ $ERRCODE -eq 1 ]
+
+  if [ $ERRCODE -eq 1 ] 
   then
-    GITPROMPT=$GITPROMPT'|'$(colorize "staged" "RED" 0)
+    GITPROMPT=$GITPROMPT'|'$(colorize 'staged' 'RED' 0)
   fi
 
   # Changes not added and not committed
   `git diff-files --quiet 2>/dev/null >&2`; ERRCODE=$?;
-  if [ $ERRCODE -eq 1 ]
+
+  if [ $ERRCODE -eq 1 ] 
   then
-    GITPROMPT=$GITPROMPT'|'$(colorize "unstaged" "RED" 0)
+    GITPROMPT=$GITPROMPT'|'$(colorize 'unstaged' 'RED' 0)
   fi
 
   # Files not added, untracked and not in .gitignore
   `git ls-files --exclude-standard --others --error-unmatch . 2>/dev/null >&2`; ERRCODE=$?;
   if [ $ERRCODE -eq 0 ]
   then
-    GITPROMPT=$GITPROMPT'|'$(colorize "untracked" "GREEN" 0)
+    GITPROMPT=$GITPROMPT'|'$(colorize 'untracked' 'GREEN' 0)
   fi
 
   # All is well and clean

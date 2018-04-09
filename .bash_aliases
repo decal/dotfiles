@@ -16,22 +16,12 @@ alias rm='rm -I --preserve-root --one-file-system'
 #alias mv='mv -i'
 #alias cp='cp -i'
 
-# List Commands
-alias ls='ls --color -C'
-alias ls1='ls -1'
-alias ll='ls -l'
-alias lsl='ls -l'
-alias la='ls -a'
-alias lsa='ls -a'
-alias ks=ls
-alias lsalt='ls -alt | less'
-
 # Directory Creation Commands
 alias mkdir='mkdir -pv' mkd='mkdir -pv'
 alias mkdp='mkdir -p' mkdirp='mkdir -p'
 
-# grep commands
-alias grep='grep --color'
+# Process table commands
+alias psx='COLUMNS=10240 ps axel'
 
 # Update commands
 alias update='sudo apt update'
@@ -77,25 +67,34 @@ alias start="/mnt/c/Windows/System32/cmd.exe /c START /MAX /NODE 0 /D 'C:\Users\
 ## Typos
 
 # PAGER commands
-#alias More=more MORE=more mORE=more
-#alias Less=less LESS=less lESS=less
-#alias Most=most mOST=most MOST=most
+alias More=more omre=more mroe=more moer=more
+alias Less=less elss=less 
+alias Most=most omst=most mots=most mtos=most
 
 # host
-alias hots=host Host=host 
-#alias hots=host Host=host Hots=host HOST=host HOTS=host hOST=host hOTS=host
-## TODO: write program that genenerates aliases bashed on char swaps
+alias Host=host ohst=host htos=host hots=host
+## TODO: write program that genenerates aliases bashed on char swaps that can be: eval $(genswaps zipinfo)
 alias zpiinfo=zipinfo izpinfo=zipinfo 
 
-
-alias ls='ls --color'
+# dir commands
 alias dir='dir --color'
 alias vdir='vdir --color'
+
+# grep commands
+
 alias grep='grep --color'
 alias fgrep='fgrep --color'
 alias egrep='egrep --color'
-alias ccc='gcc -O2 -fopenmp -Wall -pedantic $1'
-# some more ls aliases
+## TODO: make compile a function to strip the extension to -o argument
+alias compile='gcc -O2 -fopenmp -Wall -pedantic $1'
+
+# list commands
+alias ls='ls --color -C'
+alias ls1='ls -1'
+alias lsl='ls -l'
+alias lsa='ls -a'
+alias ks=ls
+alias lsalt='ls -alt | less'
 alias ll='ls -alF'
 alias la='ls -A'
 alias lc='ls -C'
@@ -136,9 +135,12 @@ alias mirror='wget -m -np --no-check-certificate'
 alias xnmap="nmap -T5 -Pn -n -A -p0-65535 -sS $1 -oG $1.nmap"
 
 # Package Management
-alias update='apt-get -y update'
-alias upgrade='apt-get -y upgrade'
-alias autoremove='apt-get -y autoremove'
+alias update='sudo apt-get -y update'
+alias upgrade='sudo apt-get -y upgrade'
+alias dist-upgrade='sudo apt-get -y dist-upgrade'
+alias autoremove='sudo apt-get -y autoremove'
+alias auto-update='update; upgrade; dist-upgrade; autoremove'
+alias recent-installs='awk "$3~/^install$/ {print $4;}" /var/log/dpkg.log | tail -n 22 | cut -d ":" -f1'
 
 # Shell names
-alias bsah='bash'
+alias bsah=bash

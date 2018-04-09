@@ -170,12 +170,16 @@ function pipx {
   return $rc
 }
 
+export CDPATH=".:~:~/GIT/decal:~/GITLAB/decal/:~/repos:~/gists:~/github:~/cmds"
 export LD_LIBRARY_PATH='/home/decal/local/lib:/usr/local/lib'
 export RUBYLIB='/home/decal/GIT/decal/zap-attack/lib:/home/decal/GIT/decal/aemscanio/lib:/home/decal/GIT/decal/combos_permutedirs/lib:/home/decal/GIT/decal/dirverser/lib:/home/decal/GIT/decal/percent_encode/lib:/home/decal/GIT/decal/filb/lib:/home/decal/code/rb/helpshow/lib'
 export EDITOR=/usr/bin/vim GIT_EDITOR=/usr/bin/vim
 export PAGER=/usr/bin/less GIT_PAGER=/usr/bin/less
+export MOST_SWITCHES='-t'
+export LESS='-irP "?f%f .?ltLine %lt:?pt%pt\%:?btByte %bt:-..."' LESSHISTSIZE=128
 
 set -o vi
+set visible-stats=on colored-stats=on completion-ignore-case=on completion-query-items=256 mark-symlinked-directories=on mark-modified-lines=on
 
 #export LIBRE_COMPILE=' -I/home/decal/local/include -L/home/decal/local/lib -lssl -lcrypto'
 #export OSSL_COMPILE='  -I/usr/local/src/openssl-1.1.0f/include -L/usr/local/lib -lssl -lcrypto'
@@ -212,4 +216,5 @@ if [ -f '/home/decal/google-cloud-sdk/path.bash.inc' ]; then source '/home/decal
 # The next line enables shell command completion for gcloud.
 if [ -f '/home/decal/google-cloud-sdk/completion.bash.inc' ]; then source '/home/decal/google-cloud-sdk/completion.bash.inc'; fi
 
-echo 'Write WAF that enforces Access-Control-Allow-Origin and other security headers'
+# autocompletion
+eval "$(pandoc --bash-completion)"

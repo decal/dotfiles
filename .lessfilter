@@ -1,0 +1,12 @@
+#!/bin/sh
+case "$1" in
+  *.extension)
+    extension-handler "$1"
+    ;;
+  *)
+    # We don't handle this format.
+    exit 1
+esac
+
+# No further processing by lesspipe necessary
+exit 0
