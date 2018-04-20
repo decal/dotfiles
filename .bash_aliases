@@ -144,3 +144,7 @@ alias recent-installs='awk "$3~/^install$/ {print $4;}" /var/log/dpkg.log | tail
 
 # Shell names
 alias bsah=bash
+
+# compilation of C source code
+alias ccaout='gcc -O2 -fopenmp -Wall -o $1 $1.c && ./$1'
+alias compile=ccaout
