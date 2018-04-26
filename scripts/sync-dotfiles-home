@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+#
+# Synchronize (copy) all the hidden runcom files from $HOME to this dotfiles repository 
+# while converting the base file names to "dotfile" from ".file"
+#
+# Written By:    Derek Callaway [decal (AT) sdf {D0T} org]
+# Last Modified: Sun Apr 15 04:21:28 DST 2018
+# Tested On:     Ubuntu Bash in Windows Subsystem for Linux
+#
+
+for df in dot*
+  do declare adotfile=$(echo "$df" | sed 's/dot/./')
+done
+
+exit 0

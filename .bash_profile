@@ -1,6 +1,15 @@
 # Read this when bash is initialized as a login shell
 
+# octal file creation mode mask
+umask 0027
+
 [ -f ~/.bashrc ] && source ~/.bashrc
+
+# minimize permission bits on history files
+chmod -c 0600 -- ~/.*hist*
+
+# autocompletion
+eval "$(pandoc --bash-completion)"
 
 function colorize {
   local STRING="$1" COLOR="$2" BOLD="$3"

@@ -55,38 +55,29 @@ else
     PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
 fi
 
-unset color_prompt force_color_prompt
+# unset color_prompt force_color_prompt
 
 # enable color support of ls and also add handy aliases
 if [ -x /usr/bin/dircolors ]; then
     test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
-    alias ls='ls --color'
-    alias dir='dir --color'
-    alias vdir='vdir --color'
-    alias grep='grep --color=auto'
-    alias fgrep='fgrep --color=auto'
-    alias egrep='egrep --color=auto'
+    alias ls='ls --color' dir='dir --color' vdir='vdir --color'
+    alias grep='grep --color=auto' fgrep='fgrep --color=auto' egrep='egrep --color=auto'
     alias ccaout='gcc -O2 -fopenmp -Wall -o $1 $1.c && ./$1'
+    alias compile=ccaout
 fi
 
-# colored GCC warnings and errors
-export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
-
-# enable programmable completion features (you don't need to enable
-# this, if it's already enabled in /etc/bash.bashrc and /etc/profile
-# sources /etc/bash.bashrc).
+# enable programmable completion features (you don't need to enable this if 
+# it's already enabled in /etc/bash.bashrc and /etc/profile
 if ! shopt -oq posix; then
   if [ -f /usr/share/bash-completion/bash_completion ]; then
-    . /usr/share/bash-completion/bash_completion
+    source /usr/share/bash-completion/bash_completion
   elif [ -f /etc/bash_completion ]; then
-    . /etc/bash_completion
+    source /etc/bash_completion
   fi
 fi
 
-umask 0027
-
 ## TODO: add this and any other related aliases that need to be made to githose repo
-function clone {
+function clone { # clone GitHub user's repositories as supplied in command line arguments
   [ ! $2 ] && echo "usage: clone USER REPO [REPO2 [...]" && return 1
 
   local auser="$1" 
@@ -103,7 +94,26 @@ function clone {
   return $aretn
 }
 
-function pull {
+function touchadd { # create a new file and add it to git
+  [ ! $1 ] && echo "usage: touchadd FILE" && return 1
+
+  local afile="$1"
+  local -i aretn=0
+
+  touch -- "$1"
+
+  [ $? -ne 0 ] && aretn+=$?
+
+  git add -- "$1"
+
+  [ $? -ne 0 ] && aretn+=$?
+
+  return $aretn
+}
+
+alias toucha=touchadd touchg=touchadd touchgit=touchadd
+
+function pull { # pull one or more repository directories from a git server
   local -i aretn=0 nargs=$#
 
   [ ! $1 ] && echo "usage: pull DIR [DIR2 [...]]" && return 1
@@ -122,14 +132,14 @@ function pull {
   return $aretn
 }
 
-function maxnice {
+function maxnice { # maximize the process scheduling priority of the shell's parent PID
   renice -n -20 `pidof $*`
 
   return $?
 }
 
-function remirrors {
-  [ ! $1 ] && echo "usage: remirror MIRDIR" && return 1
+function remirrors { # mirror an HTTPS web site
+  [ ! $1 ] && echo "usage: remirrors MIRDIR" && return 1
 
   local -i aretn=0
 
@@ -142,7 +152,7 @@ function remirrors {
   return $aretn
 }
 
-function remirror {
+function remirror { # mirror an HTTP web site
   [ ! $1 ] && echo "usage remirror MIRDIR" && return 1
 
   local -i aretn=0
@@ -156,7 +166,7 @@ function remirror {
   return $aretn
 }
 
-function pipx {
+function pipx { # execute a command for both python2 and python3 package installations
   local -i rc=0
 
   /usr/bin/pip3 $*
@@ -170,13 +180,39 @@ function pipx {
   return $rc
 }
 
+# Shell built-in "change directory" path, i.e. check these paths if cd argument doesn't exist in CWD (Current Working Directory)
 export CDPATH=".:~:~/GIT/decal:~/GITLAB/decal/:~/repos:~/gists:~/github:~/cmds"
+
+# C path
+export CPATH=~/GIT/decal/fjorge/include:~/GIT/decal/strglob:/usr/include/x86_64-linux-gnu
+
+# Go path
+export GOPATH="$HOME/go"
+
+# Compile-time loader library path
 export LD_LIBRARY_PATH='/home/decal/local/lib:/usr/local/lib'
+
+# Ruby library directories, i.e. places to check when performing statements like: require 'gem'
 export RUBYLIB='/home/decal/GIT/decal/zap-attack/lib:/home/decal/GIT/decal/aemscanio/lib:/home/decal/GIT/decal/combos_permutedirs/lib:/home/decal/GIT/decal/dirverser/lib:/home/decal/GIT/decal/percent_encode/lib:/home/decal/GIT/decal/filb/lib:/home/decal/code/rb/helpshow/lib'
+
+# Default editors for shell and git
 export EDITOR=/usr/bin/vim GIT_EDITOR=/usr/bin/vim
+
+# Default pagers for shell and git
 export PAGER=/usr/bin/less GIT_PAGER=/usr/bin/less
+
+# Most command line switches
 export MOST_SWITCHES='-t'
+
+# Less command line switches and history size
 export LESS='-irP "?f%f .?ltLine %lt:?pt%pt\%:?btByte %bt:-..."' LESSHISTSIZE=128
+
+# File patterns to ignore during TAB based auto-completion
+export FIGNORE=".o:~"
+
+# Colored GCC warnings and errors
+export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
+
 
 set -o vi
 set visible-stats=on colored-stats=on completion-ignore-case=on completion-query-items=256 mark-symlinked-directories=on mark-modified-lines=on
@@ -195,8 +231,6 @@ set visible-stats=on colored-stats=on completion-ignore-case=on completion-query
 #export org="riteaid.org" ORG="riteaid.org"
 #export com="riteaid.com" COM="riteaid.com"
 
-export FIGNORE=".o:~"
-
 function echo_shopt {
   echo shopt -u $(shopt | egrep 'off$' | awk '{print$1}' | tr '\n' ' ')
   echo shopt -s $(shopt | egrep 'on$' | awk '{print$1}' | tr '\n' ' ')
@@ -204,9 +238,11 @@ function echo_shopt {
   return 0
 }
 
+# Shell options
 shopt -u autocd cdable_vars cdspell checkhash checkjobs compat31 compat32 compat40 compat41 compat42 direxpand dirspell dotglob execfail extdebug failglob globasciiranges gnu_errfmt histverify hostcomplete huponexit lastpipe mailwarn no_empty_cmd_completion nocaseglob nocasematch nullglob restricted_shell shift_verbose xpg_echo
 shopt -s checkwinsize cmdhist complete_fullquote expand_aliases extglob extquote force_fignore globstar histappend histreedit interactive_comments lithist login_shell progcomp promptvars sourcepath
 
+# Key bindings
 bind '"\e[A": history-search-backward'
 bind '"\e[B": history-search-forward'
 
@@ -216,5 +252,3 @@ if [ -f '/home/decal/google-cloud-sdk/path.bash.inc' ]; then source '/home/decal
 # The next line enables shell command completion for gcloud.
 if [ -f '/home/decal/google-cloud-sdk/completion.bash.inc' ]; then source '/home/decal/google-cloud-sdk/completion.bash.inc'; fi
 
-# autocompletion
-eval "$(pandoc --bash-completion)"
