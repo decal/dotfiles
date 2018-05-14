@@ -9,16 +9,11 @@ case $- in
       *) return;;
 esac
 
-# don't put duplicate lines or lines starting with space in the history.
-# See bash(1) for more options
-HISTCONTROL='ignorespace:erasedups'
-
-# append to the history file, don't overwrite it
-# shopt -s checkwinsize cmdhist complete_fullquote expand_aliases extglob extquote force_fignore histappend his
-# treedit interactive_comments lithist login_shell progcomp promptvars sourcepath
-
-# for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
-HISTSIZE=4096 HISTFILESIZE=8192
+# Don't put duplicate lines or lines starting with space in the history; see bash(1) for more info
+readonly HISTCONTROL='ignorespace:erasedups' HISTIGNORE='history*:. *'
+# these are readonly in an attempt to stop script kiddies from avoiding bash history
+readonly HISTSIZE=4096 HISTFILESIZE=8192 
+readonly HISTTIMEFORMAT='%M-%d-%Y %H:%M:%S ' HISTFILE='~/.bash_history'
 
 # make less more friendly for non-text input files, see lesspipe(1)
 [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
@@ -55,29 +50,38 @@ else
     PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
 fi
 
-# unset color_prompt force_color_prompt
+unset color_prompt force_color_prompt
 
 # enable color support of ls and also add handy aliases
 if [ -x /usr/bin/dircolors ]; then
     test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
-    alias ls='ls --color' dir='dir --color' vdir='vdir --color'
-    alias grep='grep --color=auto' fgrep='fgrep --color=auto' egrep='egrep --color=auto'
-    alias ccaout='gcc -O2 -fopenmp -Wall -o $1 $1.c && ./$1'
-    alias compile=ccaout
+    alias ls='ls --color'
+    alias dir='dir --color'
+    alias vdir='vdir --color'
+    alias grep='grep --color=auto'
+    alias fgrep='fgrep --color=auto'
+    alias egrep='egrep --color=auto'
+    alias aout='gcc -O2 -fopenmp -Wall -o $1 $1.c && ./$1'
 fi
 
-# enable programmable completion features (you don't need to enable this if 
-# it's already enabled in /etc/bash.bashrc and /etc/profile
+# colored GCC warnings and errors
+export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
+
+# enable programmable completion features (you don't need to enable
+# this, if it's already enabled in /etc/bash.bashrc and /etc/profile
+# sources /etc/bash.bashrc).
 if ! shopt -oq posix; then
   if [ -f /usr/share/bash-completion/bash_completion ]; then
-    source /usr/share/bash-completion/bash_completion
+    . /usr/share/bash-completion/bash_completion
   elif [ -f /etc/bash_completion ]; then
-    source /etc/bash_completion
+    . /etc/bash_completion
   fi
 fi
 
+umask 0027
+
 ## TODO: add this and any other related aliases that need to be made to githose repo
-function clone { # clone GitHub user's repositories as supplied in command line arguments
+function clone {
   [ ! $2 ] && echo "usage: clone USER REPO [REPO2 [...]" && return 1
 
   local auser="$1" 
@@ -94,26 +98,7 @@ function clone { # clone GitHub user's repositories as supplied in command line 
   return $aretn
 }
 
-function touchadd { # create a new file and add it to git
-  [ ! $1 ] && echo "usage: touchadd FILE" && return 1
-
-  local afile="$1"
-  local -i aretn=0
-
-  touch -- "$1"
-
-  [ $? -ne 0 ] && aretn+=$?
-
-  git add -- "$1"
-
-  [ $? -ne 0 ] && aretn+=$?
-
-  return $aretn
-}
-
-alias toucha=touchadd touchg=touchadd touchgit=touchadd
-
-function pull { # pull one or more repository directories from a git server
+function pull {
   local -i aretn=0 nargs=$#
 
   [ ! $1 ] && echo "usage: pull DIR [DIR2 [...]]" && return 1
@@ -132,14 +117,14 @@ function pull { # pull one or more repository directories from a git server
   return $aretn
 }
 
-function maxnice { # maximize the process scheduling priority of the shell's parent PID
+function maxnice {
   renice -n -20 `pidof $*`
 
   return $?
 }
 
-function remirrors { # mirror an HTTPS web site
-  [ ! $1 ] && echo "usage: remirrors MIRDIR" && return 1
+function remirrors {
+  [ ! $1 ] && echo "usage: remirror MIRDIR" && return 1
 
   local -i aretn=0
 
@@ -152,7 +137,7 @@ function remirrors { # mirror an HTTPS web site
   return $aretn
 }
 
-function remirror { # mirror an HTTP web site
+function remirror {
   [ ! $1 ] && echo "usage remirror MIRDIR" && return 1
 
   local -i aretn=0
@@ -166,7 +151,7 @@ function remirror { # mirror an HTTP web site
   return $aretn
 }
 
-function pipx { # execute a command for both python2 and python3 package installations
+function pipx {
   local -i rc=0
 
   /usr/bin/pip3 $*
@@ -180,56 +165,32 @@ function pipx { # execute a command for both python2 and python3 package install
   return $rc
 }
 
-# Shell built-in "change directory" path, i.e. check these paths if cd argument doesn't exist in CWD (Current Working Directory)
-export CDPATH=".:~:~/GIT/decal:~/GITLAB/decal/:~/repos:~/gists:~/github:~/cmds"
-
-# C path
-export CPATH=~/GIT/decal/fjorge/include:~/GIT/decal/strglob:/usr/include/x86_64-linux-gnu
-
-# Go path
-export GOPATH="$HOME/go"
-
-# Compile-time loader library path
-export LD_LIBRARY_PATH='/home/decal/local/lib:/usr/local/lib'
-
-# Ruby library directories, i.e. places to check when performing statements like: require 'gem'
-export RUBYLIB='/home/decal/GIT/decal/zap-attack/lib:/home/decal/GIT/decal/aemscanio/lib:/home/decal/GIT/decal/combos_permutedirs/lib:/home/decal/GIT/decal/dirverser/lib:/home/decal/GIT/decal/percent_encode/lib:/home/decal/GIT/decal/filb/lib:/home/decal/code/rb/helpshow/lib'
-
-# Default editors for shell and git
-export EDITOR=/usr/bin/vim GIT_EDITOR=/usr/bin/vim
-
-# Default pagers for shell and git
-export PAGER=/usr/bin/less GIT_PAGER=/usr/bin/less
-
-# Most command line switches
+export CDPATH='.:~:~/GIT/decal:~/GITLAB/decal/:~/repos:~/gists:~/github:~/cmds'
+export GOPATH="/opt" GOOS=linux GOARCH=amd64
+export GOROOT="$GOPATH/go" 
+export LD_LIBRARY_PATH='~/lib:~/local/lib:/usr/local/lib:/opt/lib:/opt/local/lib'
+export RUBYLIB='~/GIT/decal/zap-attack/lib:~/GIT/decal/aemscanio/lib:~/GIT/decal/combos_permutedirs/lib:~/GIT/decal/dirverser/lib:~/GIT/decal/percent_encode/lib:~/GIT/decal/filb/lib:'
+export EDITOR=/usr/bin/vim PAGER=/usr/bin/less
+export GIT_EDITOR="$EDITOR" GIT_PAGER="$PAGER"
 export MOST_SWITCHES='-t'
-
-# Less command line switches and history size
-export LESS='-irP "?f%f .?ltLine %lt:?pt%pt\%:?btByte %bt:-..."' LESSHISTSIZE=128
-
-# File patterns to ignore during TAB based auto-completion
-export FIGNORE=".o:~"
-
-# Colored GCC warnings and errors
-export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
-
+export LESS='-irP "?f%f .?ltLine %lt:?pt%pt\%:?btByte %bt:-..."' 
+readonly LESSHISTSIZE=128
 
 set -o vi
 set visible-stats=on colored-stats=on completion-ignore-case=on completion-query-items=256 mark-symlinked-directories=on mark-modified-lines=on
 
-#export LIBRE_COMPILE=' -I/home/decal/local/include -L/home/decal/local/lib -lssl -lcrypto'
-#export OSSL_COMPILE='  -I/usr/local/src/openssl-1.1.0f/include -L/usr/local/lib -lssl -lcrypto'
-
-#export HTTPS_PROXY='one.proxy.att.com:8080'
+#export HTTPS_PROXY='proxy.google.com:8080'
 #export https_proxy="$HTTPS_PROXY" http_proxy="$https_proxy"
 #export HTTP_PROXY="$http_proxy"
-#export HOST='finalstage.att.com'
+#export HOST='www.google.com'
 #export HTTPS="https://${HOST}/' HTTP="http://${HOST}/"
 
 # These are exports for the site I'm currently testing
-#export net="riteaid.net" NET="riteaid.net"
-#export org="riteaid.org" ORG="riteaid.org"
-#export com="riteaid.com" COM="riteaid.com"
+#export net="google.net" NET="google.net"
+#export org="google.org" ORG="google.org"
+#export com="google.com" COM="google.com"
+
+export OPTERR=1 IGNOREEOF=2 FIGNORE='.o:~:.core:.swp:#:-:.dpkg-new' # TMOUT=4
 
 function echo_shopt {
   echo shopt -u $(shopt | egrep 'off$' | awk '{print$1}' | tr '\n' ' ')
@@ -238,17 +199,25 @@ function echo_shopt {
   return 0
 }
 
-# Shell options
 shopt -u autocd cdable_vars cdspell checkhash checkjobs compat31 compat32 compat40 compat41 compat42 direxpand dirspell dotglob execfail extdebug failglob globasciiranges gnu_errfmt histverify hostcomplete huponexit lastpipe mailwarn no_empty_cmd_completion nocaseglob nocasematch nullglob restricted_shell shift_verbose xpg_echo
 shopt -s checkwinsize cmdhist complete_fullquote expand_aliases extglob extquote force_fignore globstar histappend histreedit interactive_comments lithist login_shell progcomp promptvars sourcepath
 
-# Key bindings
 bind '"\e[A": history-search-backward'
 bind '"\e[B": history-search-forward'
 
 # The next line updates PATH for the Google Cloud SDK.
-if [ -f '/home/decal/google-cloud-sdk/path.bash.inc' ]; then source '/home/decal/google-cloud-sdk/path.bash.inc'; fi
+source '/home/decal/google-cloud-sdk/path.bash.inc' 2>/dev/null
 
 # The next line enables shell command completion for gcloud.
-if [ -f '/home/decal/google-cloud-sdk/completion.bash.inc' ]; then source '/home/decal/google-cloud-sdk/completion.bash.inc'; fi
+source '/home/decal/google-cloud-sdk/completion.bash.inc' 2>/dev/null
 
+# autocompletion
+eval "$(pandoc --bash-completion)"
+
+export DIRB_COOK='CAKEPHP=4085f0f68b721a1978932ec859f15791'
+
+export PATH="/home/decal/perl5/bin${PATH:+:${PATH}}"
+export PERL5LIB="/home/decal/perl5/lib/perl5${PERL5LIB:+:${PERL5LIB}}"
+export PERL_LOCAL_LIB_ROOT="/home/decal/perl5${PERL_LOCAL_LIB_ROOT:+:${PERL_LOCAL_LIB_ROOT}}"
+export PERL_MB_OPT="--install_base \"/home/decal/perl5\""
+export PERL_MM_OPT="INSTALL_BASE=/home/decal/perl5"

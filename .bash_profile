@@ -1,17 +1,26 @@
 # Read this when bash is initialized as a login shell
 
-# octal file creation mode mask
-umask 0027
-
 [ -f ~/.bashrc ] && source ~/.bashrc
 
-# minimize permission bits on history files
-chmod -c 0600 -- ~/.*hist*
-
-# autocompletion
-eval "$(pandoc --bash-completion)"
-
 function colorize {
+  local COLORS=( BLACK RED GREEN YELLOW BLUE MAGENTA CYAN WHITE )
+
+  if [ ! "$1" ] 
+    then echo
+    echo "usage: $0 'STRING' COLOR BOLD" 
+    echo 
+    echo '  STRING  the string to colorize'
+    echo -n '  COLOR   name of color to use ( '
+    echo -n $COLORS
+    echo ' )'
+    echo '  BOLD    boolean signifies whether to bold or not'
+    echo
+    echo 'ex. colorize "string is a test\n" GREEN 1'
+    echo
+    
+    exit 1
+  fi
+
   local STRING="$1" COLOR="$2" BOLD="$3"
 
   local COLORS=( BLACK RED GREEN YELLOW BLUE MAGENTA CYAN WHITE )

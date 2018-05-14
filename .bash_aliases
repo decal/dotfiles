@@ -23,25 +23,15 @@ alias mkdp='mkdir -p' mkdirp='mkdir -p'
 # Process table commands
 alias psx='COLUMNS=10240 ps axel'
 
-# Update commands
-alias update='sudo apt update'
-alias upgrade='sudo apt upgrade -y'
-alias dist-upgrade='sudo apt dist-upgrade -y'
-alias auto-remove='sudo apt autoremove -y'
-alias UPDATE='update && upgrade && dist-upgrade && autoremove'
-
 # Lock Commands
-alias reboot='sudo reboot 00'
-alias shutdown='sudo shutdown 00'
+alias reboot='sudo reboot 00' shutdown='sudo shutdown 00'
 
 # Install commands
-alias install='sudo apt install'
-alias fixdpkg='sudo dpkg --configure -a'
+alias install='sudo apt install' fixdpkg='sudo dpkg --configure -a'
 
 # Git Commands
 alias add="git add $*"
-alias commit='git commit -a'
-alias push='git push'
+alias commit='git commit -a' push='git push'
 
 # Ping Commands
 alias ping='ping -c 5' fping='ping -c 100 -s.2'
@@ -58,10 +48,14 @@ alias wget='wget --no-check-certificate'
 
 # Python commands
 alias python2='python2 -OO' python3='python3.5 -OO'
+alias py=python py2=python2 py3=python3
 
-## TODO: write gith function so 'gith clone' works..
+# Crystal 
+alias cr=crystal crb='crystal build' cre='crystal eval' crr='crystal run' 
+alias crde='crystal deps' crdo='crystal docs' crd='crystal deps'
+
+##TODO: write gith function so 'gith clone' works..
 alias gith-clone="git clone --verbose --recurse-submodules --no-single-branch --progress -- \"https://github.com/${BASH_ARGV[1]}/${BASH_ARGV[2]}\""
-
 alias start="/mnt/c/Windows/System32/cmd.exe /c START /MAX /NODE 0 /D 'C:\Users\decal\AppData\Local\lxss\home\decal' /I /ABOVENORMAL"
 
 ## Typos
@@ -76,15 +70,6 @@ alias Host=host ohst=host htos=host hots=host
 ## TODO: write program that genenerates aliases bashed on char swaps that can be: eval $(genswaps zipinfo)
 alias zpiinfo=zipinfo izpinfo=zipinfo 
 
-# dir commands
-alias dir='dir --color'
-alias vdir='vdir --color'
-
-# grep commands
-
-alias grep='grep --color'
-alias fgrep='fgrep --color'
-alias egrep='egrep --color'
 ## TODO: make compile a function to strip the extension to -o argument
 alias compile='gcc -O2 -fopenmp -Wall -pedantic $1'
 
@@ -145,6 +130,6 @@ alias recent-installs='awk "$3~/^install$/ {print $4;}" /var/log/dpkg.log | tail
 # Shell names
 alias bsah=bash
 
-# compilation of C source code
-alias ccaout='gcc -O2 -fopenmp -Wall -o $1 $1.c && ./$1'
-alias compile=ccaout
+# Utility Aliases
+alias grepenv="egrep '^[A-Z0-9_]{3,12}$' | grep -v '^[a-z]{2,}$' | egrep -v '^[0-9]'"
+
