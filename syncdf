@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+#
+# synchronize the hidden paths in this repository with the hidden paths in $HOME
+#
+
+echo -n "FILES: "
+
+for hf in $(ls -1d ~/.*)
+  do afile=$(basename $hf) 
+  [ ! -f "$afile" ] && [ -f "$hf" ] && echo -n "$afile "
+done
+
+echo -en "\nDIRECTORIES: "
+
+for hd in $(ls -1d ~/.*)
+  do adir=$(basename $hd)
+  [ ! -d "$adir" ] && [ -d "$hd" ] && echo -n "$adir "
+done
+
+echo -en "\nLINKS: "
+
+for hl in $(ls -1d ~/.*)
+  do alink=$(basename $hl)
+  [ ! -L "$alink" ] && [ -L "$hl" ] && echo -n "$alink "
+done
+
+echo
+
+exit 0

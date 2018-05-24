@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+#
+# display hidden files in $HOME that do not have a corresponding file in this 
+# repository which starts with the string "dot" instead
+#
+
+for df in dot*
+  do dotname=$(echo "$df" | sed 's/dot/./')
+  [ ! -f "$HOME/$dotname" ] && echo "$HOME/$dotname"
+done
+
+exit 0
