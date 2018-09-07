@@ -1,1 +1,1 @@
-+nostats +nocomments +nocmd +noquestion +recurse
++noall +aaflag +adflag +nocdflag +answer +bufsize=65535 +dnssec +stats +tcp +keepopen +crypto +authority +additional +besteffort +aaonly +rrcomments
