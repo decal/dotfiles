@@ -12,7 +12,8 @@ alias .3='cd ../../..'
 #alias winsize=xwininfo
 
 # Safety Commands
-alias rm='rm -I --preserve-root --one-file-system'
+[ `uname -s` == 'Darwin' ] && alias rm='rm -P' || alias rm='rm -I --preserve-root --one-file-system'
+#alias rm='rm -i'
 #alias mv='mv -i'
 #alias cp='cp -i'
 
@@ -74,7 +75,7 @@ alias zpiinfo=zipinfo izpinfo=zipinfo
 alias compile='gcc -O2 -fopenmp -Wall -pedantic $1'
 
 # list commands
-alias ls='ls --color -C'
+alias ls='ls -GC'
 alias ls1='ls -1'
 alias lsl='ls -l'
 alias lsa='ls -a'
