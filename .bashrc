@@ -14,6 +14,7 @@ export BASHISH_CP BASHISH_OLDPATH TTY ENV                       ## line added by
 fi                                                              ## line added by bashish
 export HOMEBREW=/Users/decal/homebrew
 export PDFTK=/usr/local/bin/pdftk
+export MOSH_PREDICTION_DISPLAY=adaptive
 
 # ~/.bashrc: executed by bash(1) for non-login shells.
 # see /usr/share/doc/bash/examples/startup-files (in the package bash-doc) for examples
@@ -144,6 +145,8 @@ function tailer {
 function lesser {
   coderay $1 | most
 }
+
+function timeout() { perl -e 'alarm shift; exec @ARGV' "$@"; }
 
 ## TODO: add this and any other related aliases that need to be made to githose repo
 ## TODO: move all functions into .bash_functions
