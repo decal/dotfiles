@@ -90,3 +90,10 @@ function disable-git-prompt {
   export PS1GIT="$PS1"
   export PS1="$PS1OLD"
 }
+
+# Path to the bash it configuration
+#export BASH_IT="/Users/decal/bash-it"
+
+
+test -e "${HOME}/.iterm2_shell_integration.bash" && source "${HOME}/.iterm2_shell_integration.bash"
+

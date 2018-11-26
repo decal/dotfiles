@@ -38,14 +38,16 @@ alias commit='git commit -a' push='git push'
 alias ping='ping -c 5' fping='ping -c 100 -s.2'
 
 # Vim commands
-alias vi=vim
-alias svi='sudo vi'
-alias svim='sudo vim'
-alias bashp='bash --posix'
-alias sbash='sudo bash'
-alias sbashp='sudo bash --posix'
-alias edit=vim
-alias wget='wget --no-check-certificate'
+alias sv='sudo vi'
+alias edit='vim'
+
+# Bash commands
+alias bp='bash --posix'
+alias sb='sudo bash'
+
+# Wget commands
+alias wget='wget --continue --show-progress -U "MSIE" --no-check-certificate'
+alias mirror='wget -m -np --no-check-certificate'
 
 # Python commands
 alias python2='python2 -OO' python3='python3.5 -OO'
@@ -103,7 +105,7 @@ alias ren='renice'
 #alias ssl='openssl s_client -quiet -connect'
 #alias tls='openssl s_client -connect'
 #alias tls1='openssl s_client -tls1 -connect'
-#alias tls11='openssl s_client -tls1 -connect'
+#alias tls11='openssl s_client -tls1_1 -connect'
 #alias tls1_1='openssl s_client -tls1_1 -connect'
 #alias tls12='openssl s_client -tls1_2 -connect'
 #alias tls1_2='openssl s_client -tls1_2 -connect'
@@ -115,7 +117,6 @@ alias s_client='openssl s_client -connect'
 alias GIT="cd /home/decal/GIT/decal;cd $1"
 
 alias github="cd /home/decal/github;cd */$1"
-alias mirror='wget -m -np --no-check-certificate'
 
 # Security Tools
 alias xnmap="nmap -T5 -Pn -n -A -p0-65535 -sS $1 -oG $1.nmap"

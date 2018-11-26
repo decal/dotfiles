@@ -1,12 +1,22 @@
-# EditorConfig is awesome: http://EditorConfig.org
+# EditorConfig helps developers define and maintain consistent
+# coding styles between different editors and IDEs
+# editorconfig.org
 
-# top-most EditorConfig file
 root = true
 
-# Tab indentation
 [*]
-indent_style = tab
-indent_size = 4
+end_of_line = lf
+charset = utf-8
+trim_trailing_whitespace = true
+insert_final_newline = true
+indent_style = space
+indent_size = 2
+
+[*.hbs]
+insert_final_newline = false
+
+[*.{diff,md}]
+trim_trailing_whitespace = false
 
 # The indent size used in the `package.json` file cannot be changed
 # https://github.com/npm/npm/pull/3180#issuecomment-16336516

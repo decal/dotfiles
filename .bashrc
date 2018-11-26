@@ -1,18 +1,18 @@
 
 # Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
 export PATH="$PATH:$HOME/.rvm/bin:/Users/decal/homebrew/bin:/Users/decal/homebrew/opt/go/libexec/bin:/Users/decal/.cargo/bin"
-BASHISHDIR="/Users/decal/homebrew/Cellar/bashish/2.2.4/share/bashish"                 ## line added by bashish
-TTY=`tty 2>/dev/null` && if test "x$BASHISHDIR" != x;then       ## line added by bashish
-test "$BASHISH_OLDPATH"||BASHISH_OLDPATH="$PATH"                ## line added by bashish
-export GOPATH="$HOME/go"
-PATH="$HOME/.bashish/launcher:$BASHISHDIR/lib:$BASHISH_OLDPATH:$GOPATH/bin" ## line added by bashish
-BASHSISH_CP=437                                                 ## line added by bashish
-TEST_TERM="$TERM" _bashish_utfcheck && BASHISH_CP=utf8          ## line added by bashish
-ENV="$HOME/.profile"                                            ## line added by bashish
-export BASHISH_CP BASHISH_OLDPATH TTY ENV                       ## line added by bashish
-. "$BASHISHDIR/main/prompt/sh/init"                             ## line added by bashish
-fi                                                              ## line added by bashish
+#BASHISHDIR="/Users/decal/homebrew/Cellar/bashish/2.2.4/share/bashish"                 ## line added by bashish
+#TTY=`tty 2>/dev/null` && if test "x$BASHISHDIR" != x;then       ## line added by bashish
+#test "$BASHISH_OLDPATH"||BASHISH_OLDPATH="$PATH"                ## line added by bashish
+#PATH="$HOME/.bashish/launcher:$BASHISHDIR/lib:$BASHISH_OLDPATH:$GOPATH/bin" ## line added by bashish
+#BASHSISH_CP=437                                                 ## line added by bashish
+#TEST_TERM="$TERM" _bashish_utfcheck && BASHISH_CP=utf8          ## line added by bashish
+#ENV="$HOME/.profile"                                            ## line added by bashish
+#export BASHISH_CP BASHISH_OLDPATH TTY ENV                       ## line added by bashish
+#. "$BASHISHDIR/main/prompt/sh/init"                             ## line added by bashish
+#fi                                                              ## line added by bashish
 export HOMEBREW=/Users/decal/homebrew
+export HB="$HOMEBREW"
 export PDFTK=/usr/local/bin/pdftk
 export MOSH_PREDICTION_DISPLAY=adaptive
 
@@ -78,12 +78,6 @@ unset color_prompt force_color_prompt
 # enable color support of ls and also add handy aliases
 if [ -x /usr/bin/dircolors ]; then
     test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
-    #alias ls='ls --color'
-    #alias dir='dir --color'
-    #alias vdir='vdir --color'
-    #alias grep='grep --color=auto'
-    #alias fgrep='fgrep --color=auto'
-    #alias egrep='egrep --color=auto'
     alias aout='gcc -O2 -fopenmp -Wall -o $1 $1.c && ./$1'
 fi
 
@@ -112,26 +106,68 @@ function cater {
   for f in "$*"
     do coderay $f
   done
+
+  return 0
+}
+
+# path_prepend, path_append and mkcd are from https://github.com/uberspot/dotfiles
+path_prepend() {
+    if test -d "$1"; then
+        PATH="$1:$PATH"
+    fi
+}
+
+path_append() {
+    if test -d "$1"; then
+        PATH="$PATH:$1"
+    fi
+}
+
+mkcd() {
+    mkdir -p "$1"
+    builtin cd "$1"
+}
+
+
+# Download an individual file from GitHub
+function ghfile {
+  if [ ! "$3" ]
+    then echo
+    echo "usage: $0 USER REPO PATH"
+    echo
+    echo '  USER  user name of account to download file from'
+    echo '  REPO  the repository of the project file is in'
+    echo '  PATH  path to file within given repository'
+    echo
+    echo 'ex. ghfile decal werdlists software-strs/README.md'
+    echo
+
+    return 1
+  fi
+
+  wget -k --continue --show-progress -- "https://raw.githubusercontent.com/${1}/${2}/master/${3}"
+
+  return $?
 }
 
 function compile {
-  set -x
-
   if [ ! "$1" ]
     then echo 
     echo "usage: $0 FILE"
     echo
     echo '  FILE  name of source code file to compile'
     echo
+    echo 'ex. compile hello.c'
+    echo
 
-    exit 1
+    return 1
   fi
 
   declare aout=`basename $1 .c`
 
   gcc -O2 -fopenmp -Wall -pedantic -o "$aout" "$1"
 
-  set +x
+  return $?
 }
 
 function header {
@@ -151,7 +187,7 @@ function timeout() { perl -e 'alarm shift; exec @ARGV' "$@"; }
 ## TODO: add this and any other related aliases that need to be made to githose repo
 ## TODO: move all functions into .bash_functions
 function clone {
-  [ ! $2 ] && echo "usage: clone USER REPO [REPO2 [...]" && return 1
+  [ ! "$2" ] && echo "usage: clone USER REPO [REPO2 [...]" && return 1
 
   local auser="$1" 
   local -i aretn=0
@@ -161,7 +197,7 @@ function clone {
   for r in $*
     do git clone -v "https://github.com/${auser}/${r}" & 2>/dev/null
 
-    [ $? -gt $aretn ] && aretn=$?
+    [ $? -gt 0 ] && aretn+=$?
   done
 
   return $aretn
@@ -180,7 +216,7 @@ function pull {
 
   for n in `seq 1 $nargs`
     do wait
-    [ $? -gt $aretn ] && aretn=$?
+    [ $? -gt 0 ] && aretn+=$?
   done
 
   return $aretn
@@ -193,28 +229,28 @@ function maxnice {
 }
 
 function remirrors {
-  [ ! $1 ] && echo "usage: remirror MIRDIR" && return 1
+  [ ! "$1" ] && echo "usage: remirrors HOSTDIR" && return 1
 
   local -i aretn=0
 
   for urlstr in $(find $1 -type d -print)
-    do nice wget --tries=4 -4 -m -np -nc --no-check-certificate -- "https://${urlstr}"
+    do nice wget --tries=2 -4 -m -np -nc -k -- "https://${urlstr}"
 
-    [ $? -gt $aretn ] && aretn=$?
+    [ $? -gt $aretn ] && aretn+=$?
   done
 
   return $aretn
 }
 
 function remirror {
-  [ ! $1 ] && echo "usage remirror MIRDIR" && return 1
+  [ ! "$1" ] && echo "usage: remirror HOSTDIR" && return 1
 
   local -i aretn=0
 
-  for urlstr in $(find $1 -type d -print)
-    do nice wget --tries=4 -4 -m -np -nc -- "http://${urlstr}"
+  for urlstr in `find $1 -type d -print`
+    do nice wget --tries=2 -4 -m -np -nc -- "http://${urlstr}"
 
-    [ $? -gt $aretn ] && aretn=$?
+    [ $? -gt 0 ] && aretn+=$?
   done
 
   return $aretn
@@ -244,7 +280,7 @@ function apt-cache-para() {
 }
 
 export CDPATH='.:~:~/GIT/decal:~/GITLAB/decal/:~/repos:~/gists:~/github:~/cmds'
-export GOPATH="/opt" GOOS=linux GOARCH=amd64
+export GOPATH='/opt' GOOS=linux GOARCH=amd64
 export GOROOT="$GOPATH/go" 
 export LD_LIBRARY_PATH='~/lib:~/local/lib:/usr/local/lib:/opt/lib:/opt/local/lib'
 export RUBYLIB='~/GIT/decal/zap-attack/lib:~/GIT/decal/aemscanio/lib:~/GIT/decal/combos_permutedirs/lib:~/GIT/decal/dirverser/lib:~/GIT/decal/percent_encode/lib:~/GIT/decal/filb/lib:'
@@ -252,24 +288,12 @@ export EDITOR=/usr/bin/vim PAGER=/usr/bin/less
 export GIT_EDITOR="$EDITOR" GIT_PAGER="$PAGER"
 export MAKEFLAGS='-j4' MOST_SWITCHES='-t'
 export LESS='-irP "?f%f .?ltLine %lt:?pt%pt\%:?btByte %bt:-..."' 
-# All history values are set with export to prevent log evasion
+# Each history-related variable is exported individually to prevent log evasion
 export LESSHISTSIZE=128
-# deprecated
-#export GREP_OPTIONS='--color=always'
+export GREP_OPTIONS='--color=always'
 
 set -o vi
 set visible-stats=on colored-stats=on completion-ignore-case=on completion-query-items=256 mark-symlinked-directories=on mark-modified-lines=on
-
-#export HTTPS_PROXY='proxy.google.com:8080'
-#export https_proxy="$HTTPS_PROXY" http_proxy="$https_proxy"
-#export HTTP_PROXY="$http_proxy"
-#export HOST='www.google.com'
-#export HTTPS="https://${HOST}/' HTTP="http://${HOST}/"
-
-# These are exports for the site I'm currently testing
-#export net="google.net" NET="google.net"
-#export org="google.org" ORG="google.org"
-#export com="google.com" COM="google.com"
 
 export OPTERR=1 IGNOREEOF=2 FIGNORE='.o:~:.core:.swp:#:-:.dpkg-new' # TMOUT=4
 
@@ -295,14 +319,9 @@ bind '"\e[B": history-search-forward'
 #source '/home/decal/google-cloud-sdk/compleion.bash.inc' 2>/dev/null
 
 # autocompletion
-which pandoc
-[ $? -eq 0 ] && eval "$(pandoc --bash-completion)"
+which pandoc; [ $? -eq 0 ] && eval "$(pandoc --bash-completion)"
 
 export PATH="/home/decal/bin:/usr/lib/go-1.6/bin:${HOME}/homebrew/bin:${HOME}/.linuxbrew/bin:/home/decal/perl5/bin:/home/decal/perl5/perlbrew/bin:$PATH:/sbin:/usr/sbin:/usr/local/sbin:/usr/local/bin"
-export PERL5LIB="/home/decal/perl5/lib/perl5${PERL5LIB:+:${PERL5LIB}}"
-export PERL_LOCAL_LIB_ROOT="/home/decal/perl5${PERL_LOCAL_LIB_ROOT:+:${PERL_LOCAL_LIB_ROOT}}"
-export PERL_MB_OPT="--install_base \"/home/decal/perl5\""
-export PERL_MM_OPT="INSTALL_BASE=/home/decal/perl5"
 
 # Less colors.. makes man pages easier to read!
 export LESS_TERMCAP_mb=$'\E[01;31m'    LESS_TERMCAP_md=$'\E[01;31m'
@@ -313,7 +332,13 @@ export LESS_TERMCAP_us=$'\E[01;32m'
 # Path name shortcuts for WSL
 if [ `uname -s` != 'Darwin' ]
   then
-  export DECAL='/mnt/c/Users/decal'
-  export DESKTOP='/mnt/c/Users/decal/Desktop'
-  export DOWNLOADS='/mnt/c/Users/decal/Downloads'
+  export PERL_LOCAL_LIB_ROOT="/home/decal/perl5${PERL_LOCAL_LIB_ROOT:+:${PERL_LOCAL_LIB_ROOT}}"
+  export PERL_MB_OPT='--install_base "/home/decal/perl5"' PERL_MM_OPT='INSTALL_BASE=/home/decal/perl5'
+  export PERL5LIB="/home/decal/perl5/lib/perl5${PERL5LIB:+:${PERL5LIB}}"
+  export DECAL='/mnt/c/Users/decal' DESKTOP='/mnt/c/Users/decal/Desktop' DOWNLOADS='/mnt/c/Users/decal/Downloads'
+else
+  export PERL_LOCAL_LIB_ROOT="/Users/decal/perl5${PERL_LOCAL_LIB_ROOT:+:${PERL_LOCAL_LIB_ROOT}}"
+  export PERL_MB_OPT='--install_base "/Users/decal/perl5"' PERL_MM_OPT='INSTALL_BASE=/Users/decal/perl5'
+  export PERL5LIB="/Users/decal/perl5/lib/perl5${PERL5LIB:+:${PERL5LIB}}"
+  export DECAL='/Users/decal' DESKTOP='/Users/decal/Desktop' DOWNLOADS='/Users/decal/Downloads'
 fi
