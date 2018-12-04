@@ -64,33 +64,31 @@ alias start="/mnt/c/Windows/System32/cmd.exe /c START /MAX /NODE 0 /D 'C:\Users\
 ## Typos
 
 # PAGER commands
-alias More=more omre=more mroe=more moer=more
-alias Less=less elss=less 
-alias Most=most omst=most mots=most mtos=most
+alias More=more omre=more mor=more
+alias Less=less elss=less les=less
+alias Most=most omst=most mos=most
+
+## TODO: write program that genenerates aliases bashed on char swaps that can be: eval $(genswaps zipinfo)
 
 # host
-alias Host=host ohst=host htos=host hots=host
-## TODO: write program that genenerates aliases bashed on char swaps that can be: eval $(genswaps zipinfo)
-alias zpiinfo=zipinfo izpinfo=zipinfo 
-
-## TODO: make compile a function to strip the extension to -o argument
-alias compile='gcc -O2 -fopenmp -Wall -pedantic $1'
+alias Host=host ohst=host hos=host
 
 # list commands
-alias ls='ls -GC'
+alias ls='ls -C'
 alias ls1='ls -1'
 alias lsl='ls -l'
 alias lsa='ls -a'
 alias ks=ls
 alias lsalt='ls -alt | less'
+alias lshalt='ls -halt | less'
 alias ll='ls -alF'
 alias la='ls -A'
 alias lc='ls -C'
 alias l='ls -CF'
-alias lh='ls -halt --color'
-alias lh1='ls -halt --color | head -10'
-alias lh2='ls -halt --color | head -20'
-alias lh3='ls -halt --color | head -30'
+alias lh='ls -halt'
+alias lh1='ls -halt | head -10'
+alias lh2='ls -halt | head -20'
+alias lh3='ls -halt | head -30'
 
 # Add an "alert" alias for long running commands.  Use like so:
 # sleep 10; alert

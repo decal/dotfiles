@@ -102,6 +102,32 @@ fi
 
 umask 0027
 
+
+# https://stackoverflow.com/questions/1537956/bash-limit-the-number-of-concurrent-jobs
+function max_bg_procs {
+    if [[ $# -eq 0 ]] ; then
+            echo 'usage: max_bg_procs NUM_PROCS'
+            echo 
+            echo '  NUM_PROCS  wait until background process count (checked by \`jobs -pr\`) is less than this'
+            echo 
+            echo 'ex. max_bg_procs 30'
+
+            return 1
+    fi
+
+    local -i max_number=$((0 + ${1:-0}))
+
+    while true; do
+            local -i current_number=$(jobs -pr | wc -l)
+
+            [[ $current_number -lt $max_number ]] && break
+
+            sleep 1
+    done
+
+    return 0
+}
+
 function cater {
   for f in "$*"
     do coderay $f
@@ -187,6 +213,12 @@ function timeout() { perl -e 'alarm shift; exec @ARGV' "$@"; }
 ## TODO: add this and any other related aliases that need to be made to githose repo
 ## TODO: move all functions into .bash_functions
 function clone {
+  if [[ $1 =~ .*/.* ]]
+    then git clone -v "https://github.com/${1}" & 2>/dev/null
+
+    return $?
+  fi
+
   [ ! "$2" ] && echo "usage: clone USER REPO [REPO2 [...]" && return 1
 
   local auser="$1" 
@@ -280,17 +312,17 @@ function apt-cache-para() {
 }
 
 export CDPATH='.:~:~/GIT/decal:~/GITLAB/decal/:~/repos:~/gists:~/github:~/cmds'
-export GOPATH='/opt' GOOS=linux GOARCH=amd64
+export GOPATH='/opt' GOOS=`uname -s | tr '[A-Z]' '[a-z]'` GOARCH=amd64
 export GOROOT="$GOPATH/go" 
 export LD_LIBRARY_PATH='~/lib:~/local/lib:/usr/local/lib:/opt/lib:/opt/local/lib'
 export RUBYLIB='~/GIT/decal/zap-attack/lib:~/GIT/decal/aemscanio/lib:~/GIT/decal/combos_permutedirs/lib:~/GIT/decal/dirverser/lib:~/GIT/decal/percent_encode/lib:~/GIT/decal/filb/lib:'
 export EDITOR=/usr/bin/vim PAGER=/usr/bin/less
 export GIT_EDITOR="$EDITOR" GIT_PAGER="$PAGER"
 export MAKEFLAGS='-j4' MOST_SWITCHES='-t'
-export LESS='-irP "?f%f .?ltLine %lt:?pt%pt\%:?btByte %bt:-..."' 
+export LESS='-irP "?f%f .?ltLine %lt:?pt%pt\%:?btByte %bt:-..."' LESS_IS_MORE=1 LESSSECURE=1
 # Each history-related variable is exported individually to prevent log evasion
 export LESSHISTSIZE=128
-export GREP_OPTIONS='--color=always'
+export GREP_OPTIONS='-a'
 
 set -o vi
 set visible-stats=on colored-stats=on completion-ignore-case=on completion-query-items=256 mark-symlinked-directories=on mark-modified-lines=on
@@ -342,3 +374,9 @@ else
   export PERL5LIB="/Users/decal/perl5/lib/perl5${PERL5LIB:+:${PERL5LIB}}"
   export DECAL='/Users/decal' DESKTOP='/Users/decal/Desktop' DOWNLOADS='/Users/decal/Downloads'
 fi
+
+###-tns-completion-start-###
+if [ -f /Users/decal/.tnsrc ]; then 
+    source /Users/decal/.tnsrc 
+fi
+###-tns-completion-end-###
