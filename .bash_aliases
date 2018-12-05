@@ -17,6 +17,10 @@ alias .3='cd ../../..'
 #alias mv='mv -i'
 #alias cp='cp -i'
 
+# ASCII-enable all grep variants
+alias grep='grep -a' egrep='egrep -a' fgrep='fgrep -a'
+alias zgrep='zgrep -a' zegrep='zegrep -a' zfgrep='zfgrep -a'
+
 # Directory Creation Commands
 alias mkdir='mkdir -pv' mkd='mkdir -pv'
 alias mkdp='mkdir -p' mkdirp='mkdir -p'

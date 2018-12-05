@@ -322,7 +322,6 @@ export MAKEFLAGS='-j4' MOST_SWITCHES='-t'
 export LESS='-irP "?f%f .?ltLine %lt:?pt%pt\%:?btByte %bt:-..."' LESS_IS_MORE=1 LESSSECURE=1
 # Each history-related variable is exported individually to prevent log evasion
 export LESSHISTSIZE=128
-export GREP_OPTIONS='-a'
 
 set -o vi
 set visible-stats=on colored-stats=on completion-ignore-case=on completion-query-items=256 mark-symlinked-directories=on mark-modified-lines=on
