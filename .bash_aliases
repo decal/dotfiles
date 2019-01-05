@@ -87,6 +87,9 @@ alias lsld='ls -ld' lsdl='ls -dl'
 alias slld='ls -ld' sldl='ls -dl'
 alias lsal='ls -Al' lsla='ls -lA'
 alias slal='ls -Al' slla='ls -lA'
+# -@ Display extended attribute keys and sizes in long (-l) output.
+alias lsl@='ls -l@' ls@l='ls -@l'
+alias lsla@='ls -lA@' lsal@='ls -Al@' ls@al='ls -@al' lsa@l='ls -A@l' lsl@a='ls -l@A'
 alias ks=ls
 alias lsalt='ls -Alt'
 alias lshalt='ls -hAlt' lsdalt='ls -dAlt'
