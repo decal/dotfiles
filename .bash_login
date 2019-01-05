@@ -1,0 +1,9 @@
+# This file is executed when an interactive bash login shell does not encounter
+# a script at ~/.bash_profile first.  If this file doesn't exist either, i.e. 
+# ~/.bash_login, then ~/.profile will be interpreted next.  For more info
+# regarding the bash initialization process, refer to the link below:
+#
+# https://www.gnu.org/software/bash/manual/html_node/Bash-Startup-Files.html
+#
+
+
