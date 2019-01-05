@@ -79,20 +79,36 @@ alias Host=host ohst=host hos=host
 
 # list commands
 alias ls='ls -C'
-alias ls1='ls -1'
-alias lsl='ls -l'
-alias lsa='ls -a'
+alias l1='ls -1' ls1='ls -1'
+alias lsl='ls -l' lsa='ls -A'
+alias lsd='ls -d' 
+alias lsa1='ls -A1' ls1a='ls -1A'
+alias lsld='ls -ld' lsdl='ls -dl'
+alias slld='ls -ld' sldl='ls -dl'
+alias lsal='ls -Al' lsla='ls -lA'
+alias slal='ls -Al' slla='ls -lA'
 alias ks=ls
-alias lsalt='ls -alt | less'
-alias lshalt='ls -halt | less'
-alias ll='ls -alF'
+alias lsalt='ls -Alt'
+alias lshalt='ls -hAlt' lsdalt='ls -dAlt'
+alias lsdhalt='ls -lsdhAlt'
+alias ll='ls -AlF'
 alias la='ls -A'
 alias lc='ls -C'
 alias l='ls -CF'
-alias lh='ls -halt'
-alias lh1='ls -halt | head -10'
-alias lh2='ls -halt | head -20'
-alias lh3='ls -halt | head -30'
+alias lh='ls -hAlt'
+alias lh1='ls -hAlt | head -10' lh2='ls -hAlt | head -20'
+alias lh3='ls -hAlt | head -30' lh4='ls -hAlt | head -40'
+alias lh5='ls -hAlt | head -50' lh6='ls -hAlt | head -60'
+alias lh7='ls -hAlt | head -70' lh8='ls -hAlt | head -80'
+alias lh9='ls -hAlt | head -90' lh10='ls -hAlt | head -100'
+
+# Aliases related to the usage and/or free'ing of disk space
+alias dusk='du -sk . | sort -n'
+alias duhd1='du -hd1 .' duhd2='du -hd2 .'
+alias duhd3='du -hd3 .' duhd4='du -hd4 .'
+alias duhd5='du -hd5 .' duhd6='du -hd6 .'
+alias duhd7='du -hd7 .' duhd8='du -hd8 .'
+alias duhd9='du -hd9 .' duhd10='du -hd10 .'
 
 # Add an "alert" alias for long running commands.  Use like so:
 # sleep 10; alert
@@ -116,12 +132,12 @@ alias ren='renice'
 
 alias s_client='openssl s_client -connect'
 
-alias GIT="cd /home/decal/GIT/decal;cd $1"
+alias GIT="cd /home/decal/GIT/decal;cd -- '$1'"
 
-alias github="cd /home/decal/github;cd */$1"
+alias github="cd /home/decal/github;cd -- '*/$1'"
 
 # Security Tools
-alias xnmap="nmap -T5 -Pn -n -A -p0-65535 -sS $1 -oG $1.nmap"
+alias xnmap="nmap -T5 -Pn -n -A -p0-65535 -sS '$1' -oG '$1.nmap'"
 
 # Package Management
 alias update='sudo apt-get -y update'
@@ -129,7 +145,7 @@ alias upgrade='sudo apt-get -y upgrade'
 alias dist-upgrade='sudo apt-get -y dist-upgrade'
 alias autoremove='sudo apt-get -y autoremove'
 alias auto-update='update; upgrade; dist-upgrade; autoremove'
-alias recent-installs='awk "$3~/^install$/ {print $4;}" /var/log/dpkg.log | tail -n 22 | cut -d ":" -f1'
+alias recent-installs='awk "$3~/^install$/ {print$4}" /var/log/dpkg.log | tail -n 22 | cut -d ":" -f1'
 
 # Shell names
 alias bsah=bash
