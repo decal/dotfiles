@@ -36,7 +36,7 @@ stty -ixon
 export HISTCONTROL='ignorespace:erasedups:ignoredups' HISTIGNORE='history*:. *'
 # these are export in an attempt to stop script kiddies from avoiding bash history
 export HISTSIZE=4096 HISTFILESIZE=8192 
-export HISTTIMEFORMAT='%M-%d-%Y %H:%M:%S ' HISTFILE='~/.bash_history'
+export HISTTIMEFORMAT='%M-%d-%Y %H:%M:%S ' # HISTFILE='~/.bash_history'
 
 # make less more friendly for non-text input files, see lesspipe(1)
 [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
@@ -154,6 +154,26 @@ mkcd() {
     builtin cd "$1"
 }
 
+function dmgrm {
+  if [ ! "$1" ]; then 
+    echo
+    echo "usage: $0 PATH"
+    echo
+    echo '  PATH  location of DMG file to remove and re-create with cleared permissions'
+    echo 
+    echo 'ex. dmgrm "Waterfox 56.2.5 Setup.dmg"'
+    echo 
+
+    return 1
+  fi
+
+  rm -f -- "$1"
+  touch -- "$1"
+  chmod -v 0 -- "$1"
+  ls -lF@ -- "$1"
+
+  return $?
+}
 
 # Download an individual file from GitHub
 function ghfile {
@@ -213,21 +233,21 @@ function timeout() { perl -e 'alarm shift; exec @ARGV' "$@"; }
 ## TODO: add this and any other related aliases that need to be made to githose repo
 ## TODO: move all functions into .bash_functions
 function clone {
-  if [[ $1 =~ .*/.* ]]
-    then git clone -v "https://github.com/${1}" & 2>/dev/null
+  if [[ $1 =~ .*/.* ]]; then
+    git clone -v "https://github.com/${1}" 2>/dev/null &
 
     return $?
   fi
 
-  [ ! "$2" ] && echo "usage: clone USER REPO [REPO2 [...]" && return 1
+  [ ! "$2" ] && echo 'usage: clone USER REPO1 [REPO2 [...]]' && return 1
 
   local auser="$1" 
   local -i aretn=0
 
   shift
 
-  for r in $*
-    do git clone -v "https://github.com/${auser}/${r}" & 2>/dev/null
+  for r in $*; do
+    git clone -v "https://github.com/${auser}/${r}" 2>/dev/null &
 
     [ $? -gt 0 ] && aretn+=$?
   done
@@ -238,16 +258,17 @@ function clone {
 function pull {
   local -i aretn=0 nargs=$#
 
-  [ ! $1 ] && echo "usage: pull DIR [DIR2 [...]]" && return 1
+  [ ! $1 ] && echo 'usage: pull DIR [...]' && return 1
 
-  for d in $*
-    do cd "$d"
-    git pull -v &
-    cd ..
+  for d in $*; do
+    cd "$d"
+    git pull -v 2>/dev/null & 
+    cd "$OLDPWD"
   done
 
-  for n in `seq 1 $nargs`
-    do wait
+  for n in `seq 1 $nargs`; do
+    wait
+
     [ $? -gt 0 ] && aretn+=$?
   done
 
@@ -360,6 +381,11 @@ export LESS_TERMCAP_me=$'\E[0m'        LESS_TERMCAP_se=$'\E[0m'
 export LESS_TERMCAP_so=$'\E[01;44;33m' LESS_TERMCAP_ue=$'\E[0m'
 export LESS_TERMCAP_us=$'\E[01;32m'
 
+# Prompt for decision when a test fails, verify integrity of distribution files
+# with CHECKSUMS and SIGNATURES, search other mirrors if missing from first
+# Refer to `perldoc cpanm` for more information..
+export PERL_CPANM_OPT='--cascade-search --prompt --verify'
+
 # Path name shortcuts for WSL
 if [ `uname -s` != 'Darwin' ]
   then
@@ -379,3 +405,7 @@ if [ -f /Users/decal/.tnsrc ]; then
     source /Users/decal/.tnsrc 
 fi
 ###-tns-completion-end-###
+
+#if [ -f $(brew --prefix)/opt/mcfly/mcfly.bash ]; then
+#  . $(brew --prefix)/opt/mcfly/mcfly.bash
+#fi
