@@ -167,6 +167,9 @@ function dmgrm {
     return 1
   fi
 
+  [ ! -s "$1" ] && echo "*** $1 does not exist or is already empty!" && return 2
+
+  chmod -v a+w -- "$1"
   rm -f -- "$1"
   touch -- "$1"
   chmod -v 0 -- "$1"
