@@ -35,7 +35,7 @@ alias reboot='sudo reboot 00' shutdown='sudo shutdown 00'
 alias install='sudo apt install' fixdpkg='sudo dpkg --configure -a'
 
 # Git Commands
-alias add="git add $*"
+alias add="git add $*" status='git status'
 alias commit='git commit -a' push='git push'
 
 # Ping Commands
@@ -112,6 +112,11 @@ alias duhd3='du -hd3 .' duhd4='du -hd4 .'
 alias duhd5='du -hd5 .' duhd6='du -hd6 .'
 alias duhd7='du -hd7 .' duhd8='du -hd8 .'
 alias duhd9='du -hd9 .' duhd10='du -hd10 .'
+alias duhd1g='du -hd1 . | egrep "(G|M)"' duhd2g='du -hd2 . | egrep "(G|M)"'
+alias duhd3g='du -hd3 . | egrep "(G|M)"' duhd4g='du -hd4 . | egrep "(G|M)"'
+alias duhd5g='du -hd5 . | egrep "(G|M)"' duhd6g='du -hd6 . | egrep "(G|M)"'
+alias duhd7g='du -hd7 . | egrep "(G|M)"' duhd8g='du -hd8 . | egrep "(G|M)"'
+alias duhd9g='du -hd9 . | egrep "(G|M)"' duhd10g='du -hd10 . | egrep "(G|M)"'
 
 # Add an "alert" alias for long running commands.  Use like so:
 # sleep 10; alert
