@@ -178,6 +178,36 @@ function dmgrm {
   return $?
 }
 
+function psax {
+  if [ ! "$1" ]; then
+    /bin/ps ax
+  else
+    /bin/ps ax | egrep -i -- "$1"
+  fi
+
+  return $?
+}
+
+function psaux {
+  if [ ! "$1" ]; then
+    /bin/ps aux
+  else
+    /bin/ps aux | egrep -i -- "$1"
+  fi
+
+  return $?
+}
+
+function pself {
+  if [ ! "$1" ]; then
+    /bin/ps -elf
+  else
+    /bin/ps -elf | egrep -i -- "$1"
+  fi
+
+  return $?
+}
+
 # Download an individual file from GitHub
 function ghfile {
   if [ ! "$3" ]
@@ -412,3 +442,10 @@ fi
 #if [ -f $(brew --prefix)/opt/mcfly/mcfly.bash ]; then
 #  . $(brew --prefix)/opt/mcfly/mcfly.bash
 #fi
+
+# tabtab source for serverless package
+# uninstall by removing these lines or running `tabtab uninstall serverless`
+[ -f /Users/decal/homebrew/lib/node_modules/serverless/node_modules/tabtab/.completions/serverless.bash ] && . /Users/decal/homebrew/lib/node_modules/serverless/node_modules/tabtab/.completions/serverless.bash
+# tabtab source for sls package
+# uninstall by removing these lines or running `tabtab uninstall sls`
+[ -f /Users/decal/homebrew/lib/node_modules/serverless/node_modules/tabtab/.completions/sls.bash ] && . /Users/decal/homebrew/lib/node_modules/serverless/node_modules/tabtab/.completions/sls.bash
