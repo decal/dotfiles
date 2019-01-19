@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+#
+# See differences between repository dotfiles and HOME directory
+#
+# Written By:    Derek Callaway [decal (AT) sdf {D0T} org]
+# Last Modified: Fri Jan 18 17:58:50 CST 2019
+# Tested On:     Debian GNU/Linux 9
+#
+
+for df in .*
+  do diff "$HOME/$df" "$df"
+done
+
+exit 0

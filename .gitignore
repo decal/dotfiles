@@ -1,56 +1,7 @@
-# dotfiles, common names/extensions, etc.
-.*.sw[nop]
-.bundle
+.history
+.bash_history
 .byebug_history
-.env
-db/*.sqlite3
-log/*.log
-rerun.txt
-tags
-!tags/
-tmp/**/*
-!tmp/cache/.keep
-*.pyc
-
-# Editor backups
-\#*
-~*
-*~
-
-# Cache Files
-.sass-cache
-
-## OSX Files
-# General
+.python_history
+.lesshst
 .DS_Store
-.DS_Store?
-.AppleDouble
-.LSOverride
-
-# Icon must end with two \r
-Icon
-
-
-# Thumbnails
-._*
-ehthumbs.db
 Thumbs.db
-
-# Files that might appear in the root of a volume
-.DocumentRevisions-V100
-.fseventsd
-.Spotlight-V100
-.TemporaryItems
-.Trashes
-.VolumeIcon.icns
-.com.apple.timemachine.donotpresent
-
-# Directories potentially created on remote AFP share
-.AppleDB
-.AppleDesktop
-Network Trash Folder
-Temporary Items
-.apdisk
-
-## IDEs
-/.idea

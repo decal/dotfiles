@@ -122,3 +122,6 @@ command_not_found_handle() {
   fi
   return $?
 }
+export PATH="/home/decal/.linuxbrew/bin:$PATH" âÂ·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·
+export MANPATH="/home/decal/.linuxbrew/share/man:$MANPATH" âÂ·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·Â·
+export INFOPATH="/home/decal/.linuxbrew/share/info:$INFOPATH"
