@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+for f in dot*; do
+  declare afile=`echo $f | sed 's!^dot!.!'`
+  mv -v "$f" "$afile"
+done
+
+exit 0

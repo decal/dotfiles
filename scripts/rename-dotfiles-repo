@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+#
+# Rename all `./.*` files in the repository's root folder to `./dot*`
+#
+# Written By:    Derek Callaway [decal (AT) sdf {D0T} org]
+# Last Modified: Tue Jan 22 05:29:26 PST 2019
+# Tested On:     macOS High Sierra
+#
+
+ax=0
+
+for df in .*; do
+  dt=$(echo "$df" | sed 's!^.!dot!')
+  ax+=1
+
+  mv -v -- "$df" "$dt" &
+done
+
+for i in $(seq 0 $ax); do
+  wait
+done
+
+exit 0

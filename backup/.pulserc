@@ -1,0 +1,35 @@
+#! /bin/bash
+#
+# Define the various locations and what-not.
+#
+PATH=$PATH:/usr/local/bin
+
+#
+# Users and groups for permissions.
+#
+PULSE_USER=pulsestat
+PULSE_GROUP=pulsestat
+HTTPD_USER=httpd
+HTTPD_GROUP=httpd
+MTA_USER=nobody
+MTA_GROUP=nobody
+
+#
+# Where the scripts and SVN checkout is located.
+#
+export PULSE_DIR='/usr/local/labs/pulse'
+
+#
+# Where the Web pages should be put.
+#
+export WEB_DIR='/usr/local/web/served'
+
+#
+# Where the data files should go.
+#
+DATA_DIR='/usr/local/labs/pulse/data'
+
+#
+# Set up the database envariables.
+#
+[ -e $PULSE_DIR/analysis/.dbaccess.sh ] && . $PULSE_DIR/analysis/.dbaccess.sh

@@ -27,6 +27,7 @@ alias mkdp='mkdir -p' mkdirp='mkdir -p'
 
 # Process table commands
 alias psx='COLUMNS=10240 ps axel'
+alias psg='ps aux | grep'
 
 # Lock Commands
 alias reboot='sudo reboot 00' shutdown='sudo shutdown 00'

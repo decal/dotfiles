@@ -1,0 +1,73 @@
+#!/usr/bin/env bash
+#
+# copy hidden files from this repository into the HOME directory if the copy in
+# the repository is newer--after backing up the version in the HOME directory.
+#
+
+function dgst {
+  openssl dgst "$1" | cut -d " " -f2
+
+  return $?
+}
+
+mkdir home-backup repo-backup 2>/dev/null
+chmod -v -- 0700 home-backup repo-backup 2>/dev/null
+
+## TODO: same thing for find ~/.* -type f
+for adot in $(find ./ -type f -mindepth 1 -maxdepth 1 -name 'dot*' -exec basename {} \; 2>/dev/null); do
+  df=`echo "$adot" | sed 's!^dot!.!'`
+  ho="${HOME}/${df}"
+  dgst_df=`dgst "$df"` dgst_ho=`dgst "$ho"`
+
+  if [ ! "$dgst_df" -a "$dgst_ho" ]; then
+    echo '*** Backing up ' $df ' to repo-backup'
+
+    cp -av -- "$df" repo-backup 
+
+    echo '*** Overwriting ' $df ' with ' $ho
+
+    cp -av -- "$ho" .
+
+    continue
+  else
+    if [ ! "$dgst_ho" -a "$dgst_df" ]; then 
+      echo '*** Backing up ' $ho ' to home-backup'
+    
+      cp -av -- "$ho" home-backup 
+
+      echo '*** Overwriting ' $df ' with ' $ho
+
+      cp -av -- "$df" "$ho" 
+    
+      continue
+    else
+      if [ "$dgst_df" == "$dgst_ho" ]; then
+        echo '*** Contents of files are equal: ' $df ' and ' $ho
+
+        continue
+      else
+        if [ "$df" -nt "$ho" ]; then 
+          echo '*** ' $df ' has a newer modification time than ' $ho
+          echo '*** Backing up ' $ho ' to home-backup'
+
+          cp -av -- "$ho" home-backup 
+          cp -av -- "$df" "$ho"
+
+          echo '*** Wrote over ' $ho ' with ' $df
+        else
+          if [ "$ho" -nt "$df" ]; then
+            echo '*** ' $ho ' has a newer modification time than ' $df
+            echo '*** Backing up ' $ho ' to repo-backup'
+
+            cp -av -- "$df" repo-backup 
+            cp -av -- "$ho" "$df"
+
+            echo '*** Wrote over ' $df ' with ' $ho
+          fi
+        fi
+      fi
+    fi
+  fi
+done
+
+exit 0
