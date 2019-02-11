@@ -1,56 +1,58 @@
-# dotfiles, common names/extensions, etc.
-.*.sw[nop]
-.bundle
-.byebug_history
-.env
-db/*.sqlite3
-log/*.log
-rerun.txt
-tags
+
 !tags/
-tmp/**/*
 !tmp/cache/.keep
-*.pyc
-
-# Editor backups
-\#*
-~*
-*~
-
 # Cache Files
-.sass-cache
-
-## OSX Files
+# Directories potentially created on remote AFP share
+# Editor backups
+# Files that might appear in the root of a volume
 # General
+# Icon must end with two \r
+# Thumbnails
+# dotfiles, common names/extensions, etc.
+## IDEs
+## OSX Files
+*.pyc
+*~
+.*.sw[nop]
+.AppleDB
+.AppleDesktop
+.AppleDouble
 .DS_Store
 .DS_Store?
-.AppleDouble
-.LSOverride
-
-# Icon must end with two \r
-Icon
-
-
-# Thumbnails
-._*
-ehthumbs.db
-Thumbs.db
-
-# Files that might appear in the root of a volume
 .DocumentRevisions-V100
-.fseventsd
+.LSOverride
 .Spotlight-V100
 .TemporaryItems
 .Trashes
 .VolumeIcon.icns
+._*
+.apdisk
+.bash_history
+.bashdb_hist
+.betty_history
+.bundle
+.byebug_history
 .com.apple.timemachine.donotpresent
-
-# Directories potentially created on remote AFP share
-.AppleDB
-.AppleDesktop
+.env
+.fseventsd
+.guile_history
+.haxornewshistory
+.irb_history
+.node_repl_history
+.python_history
+.sass-cache
+.sqlite_history
+.tmux_history
+/.idea
+Icon
 Network Trash Folder
 Temporary Items
-.apdisk
-
-## IDEs
-/.idea
+Thumbs.db
+\#*
+db/*.sqlite3
+ehthumbs.db
+log/*.log
+rerun.txt
+tags
+tmp/**/*
+~*
